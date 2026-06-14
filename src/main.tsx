@@ -1,13 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles/index.css'
-import App from './App.tsx'
+import './langs/i18n'
+import { Providers } from './Providers'
 
 const rootElement = document.getElementById('root')
 if (!rootElement) throw new Error('Root element not found')
 
 createRoot(rootElement).render(
   <StrictMode>
-    <App />
+    <Providers />
   </StrictMode>,
 )

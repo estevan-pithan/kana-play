@@ -29,18 +29,25 @@ Ticket: [phase-1-bootstrap.md](./tickets/phase-1-bootstrap.md) · **Status: done
 
 ---
 
-## ⏳ Phase 2 — Core Infrastructure
+## ✅ Phase 2 — Core Infrastructure
 
-Ticket: [phase-2-infrastructure.md](./tickets/phase-2-infrastructure.md) · **Status: pending**
+Ticket: [phase-2-infrastructure.md](./tickets/phase-2-infrastructure.md) · **Status: done**
 
-- [ ] i18n setup (`src/langs/`): `i18n.ts`, `resources.ts`, `en-US.json`, `pt-BR.json`
-- [ ] `AppContext` (useReducer: token, language, theme, isAuthLoading)
-- [ ] `FavoritesContext` (useReducer + localStorage sync)
-- [ ] `Providers.tsx` hierarchy (QueryClient → App → Favorites → Router)
-- [ ] Spotify Axios instance + interceptors (`src/api/services/spotify/api.ts`)
-- [ ] `src/config/env.ts` + `.env.example`
-- [ ] Router (`src/routes/router.tsx`) + `ProtectedRoute`
-- [ ] Layout: `Navbar`, `PageWrapper`
+- [x] i18n setup (`src/langs/`): `i18n.ts`, `resources.ts`, `en-US.json`, `pt-BR.json`
+- [x] `AppContext` (useReducer: token, language, theme, isAuthLoading)
+- [x] `FavoritesContext` (useReducer + localStorage sync)
+- [x] `Providers.tsx` hierarchy (QueryClient → App → Favorites → Router)
+- [x] Spotify Axios instance + interceptors (`src/api/services/spotify/api.ts`)
+- [-] `src/config/env.ts` — **skipped per user request**; vars read directly from `.env` via `import.meta.env`
+- [x] Router (`src/routes/router.tsx`) + `ProtectedRoute`
+- [x] Layout: `Navbar`, `PageWrapper`, `ProtectedLayout`
+
+**Notes**
+- Page stubs created for all 5 routes so the router compiles. Each placeholder mentions which phase will populate it.
+- Spotify Axios uses module-level `tokenGetter` + `onUnauthorized` callbacks wired by `AppProvider` via `useEffect` — keeps the interceptor decoupled from React.
+- `AppContext` persists `token` and `language` to `localStorage` (keys `kanaplay_token` and `kanaplay_language`).
+- `FavoritesContext` waits for `LOAD_FAVORITES` before syncing to `localStorage` to avoid wiping on first mount.
+- Old scaffold `App.tsx` is now orphaned — `main.tsx` renders `<Providers />` directly. Safe to delete in a later pass.
 
 ---
 
