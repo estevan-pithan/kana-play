@@ -24,7 +24,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['e2e/**/*.{ts,tsx}', '*.config.{ts,js}', 'src/test/**/*.{ts,tsx}'],
+    files: ['e2e/**/*.{ts,tsx}', '*.config.{ts,js}', 'src/test/**/*.{ts,tsx}', 'src/contexts/**/*.{ts,tsx}'],
     rules: {
       'react-refresh/only-export-components': 'off',
     },
