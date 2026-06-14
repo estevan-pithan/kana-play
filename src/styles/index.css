@@ -1,0 +1,84 @@
+@import 'tailwindcss';
+@import './glass.css';
+
+@theme {
+  --color-brand: #c8922a;
+  --color-brand-light: #e8b84b;
+  --color-brand-dark: #9a6e1a;
+  --color-bg-deep: #1a0e00;
+  --color-bg-mid: #2a1800;
+  --color-bg-near-black: #111111;
+
+  --radius-glass: 16px;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(ellipse at top, var(--color-bg-mid), transparent 60%),
+      linear-gradient(180deg, var(--color-bg-deep) 0%, var(--color-bg-near-black) 100%);
+    background-attachment: fixed;
+    color: rgb(245 245 245);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+
+  .glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-input {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: inherit;
+    backdrop-filter: blur(12px);
+  }
+
+  .glass-input:focus {
+    outline: none;
+    border-color: var(--brand-border);
+    box-shadow: 0 0 0 3px var(--brand-muted);
+  }
+
+  .btn-brand {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+    color: #1a0e00;
+    font-weight: 600;
+    transition: filter 150ms ease;
+  }
+
+  .btn-brand:hover {
+    filter: brightness(1.08);
+  }
+
+  .btn-brand:active {
+    filter: brightness(0.95);
+  }
+
+  .accent-brand {
+    color: var(--brand);
+  }
+}
