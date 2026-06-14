@@ -186,6 +186,48 @@ export async function getMe() {
 }
 ```
 
+**Shared types/schemas live in `type.ts`.** When a schema or type is shared by **more
+than one endpoint of the same domain** (e.g. a sub-entity reused across responses, a
+generic paging wrapper, an enum), put it in `src/api/services/<domain>/type.ts` — not in
+an endpoint file. Endpoint files import from `./type`; never import a shared schema from
+another endpoint file (e.g. `./get-user`), since that couples unrelated endpoints and
+creates accidental import chains. Keep endpoint-specific schemas in their own service file.
+
+```ts
+// src/api/services/<domain>/type.ts
+import { z } from "zod";
+
+export const itemSchema = z.object({ id: z.string(), name: z.string() });
+export type Item = z.infer<typeof itemSchema>;
+
+export interface Paging<T> {
+  items: T[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+```
+
+```ts
+// src/api/services/<domain>/list-items.ts
+import { z } from "zod";
+import { api<DomainName>, USE_<DOMAIN_UPPER>_MOCK } from "./api";
+import { itemSchema } from "./type";
+import type { Item, Paging } from "./type";
+import { listItemsSuccessMock } from "@/api/mocks/<domain>/list-items.mock";
+
+const listItemsResponseSchema = z.object({ items: z.array(itemSchema), total: z.number() });
+
+export async function listItems(): Promise<Paging<Item>> {
+  if (USE_<DOMAIN_UPPER>_MOCK) return listItemsSuccessMock;
+  const response = await api<DomainName>.get("/items");
+  return listItemsResponseSchema.parse(response.data) as Paging<Item>;
+}
+```
+
+> Scope: `type.ts` is for types shared **within one API domain**. Types shared across
+> unrelated modules still belong in the global `src/types/`.
+
 6. **Mock guard is always the first line of the function body.** The `if (USE_<DOMAIN_UPPER>_MOCK) return <action>SuccessMock;` check must appear before any API call. This ensures no network requests are made when mocks are active.
 
 7. **Naming conventions:**
@@ -247,6 +289,7 @@ export const exampleErrorMock = {
 - [ ] Import the domain-specific api instance and mock flag from `./api`
 - [ ] Import the success mock from `@/api/mocks/<domain>/<action>.mock`
 - [ ] Define Zod response schema (adapt to actual API response format)
+- [ ] Move any schema/type shared by 2+ endpoints into `src/api/services/<domain>/type.ts` and import it from `./type` (never from a sibling endpoint file)
 - [ ] Export the inferred type via `z.infer`
 - [ ] Create async function with mock guard as the first line, then API call with `schema.parse(response.data)`
 - [ ] (Optional) Define input schema for form validation

@@ -25,6 +25,9 @@ project-root/
 │   │   │   └── [domain]/           # Grouped by domain (auth/, user/, etc.)
 │   │   └── services/               # Request functions
 │   │       └── [domain]/           # Grouped by domain (auth/, user/, etc.)
+│   │           ├── api.ts          # Domain Axios instance + mock flag
+│   │           ├── type.ts         # Types/schemas shared across this domain's endpoints
+│   │           └── [action].ts     # One file per endpoint
 │   │
 │   ├── assets/                     # Bundler-imported files (images, SVGs, fonts)
 │   │
@@ -79,6 +82,8 @@ project-root/
 
 - Each **API domain** (auth, user, product, etc.) has its own subfolder inside `services/` and `mocks/`.
 - One file per endpoint. The filename describes the action: `authenticate.ts`, `create-user.ts`, `get-user.ts`.
+- The domain's Axios instance + mock flag live in `api.ts`.
+- Types/schemas **shared by 2+ endpoints of the domain** (sub-entities, paging wrappers, enums) live in `type.ts` at the domain root. Endpoints import them from `./type` — never from a sibling endpoint file. Endpoint-specific schemas stay in the endpoint file.
 - Mocks mirror the same structure as `services/`.
 
 ```
@@ -90,10 +95,13 @@ api/
 │       └── get-user.mock.ts
 └── services/
     ├── auth/
+    │   ├── api.ts
     │   ├── authenticate.ts
     │   ├── deauthenticate.ts
     │   └── get-refresh-token.ts
     └── user/
+        ├── api.ts
+        ├── type.ts              # User, Paging<T>, … shared by user endpoints
         ├── create-user.ts
         ├── get-user.ts
         └── get-user-me.ts
@@ -172,6 +180,7 @@ styles/
 
 - Types used across **more than one module**.
 - Module-specific types stay in the module's own file.
+- Types shared **only within a single API domain** do **not** go here — they belong in that domain's `src/api/services/<domain>/type.ts` (see rule 1).
 
 ### 10. `utils/` — Pure Utilities
 
@@ -214,9 +223,10 @@ styles/
 | Is it a hook for ONE page?                      | `pages/[page]/hooks/`           |
 | Is it an API call?                              | `api/services/[domain]/`        |
 | Is it a mock?                                   | `api/mocks/[domain]/`           |
+| Is it a type shared across ONE API domain's endpoints? | `api/services/[domain]/type.ts` |
 | Is it global state (context)?                   | `contexts/`                     |
 | Is it a lib/service configuration?              | `config/`                       |
-| Is it a shared type?                            | `types/`                        |
+| Is it a type shared across MULTIPLE modules?    | `types/`                        |
 | Is it a pure function without React?            | `utils/`                        |
 | Is it an external library wrapper?              | `lib/`                          |
 | Is it a translation?                            | `langs/`                        |
