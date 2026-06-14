@@ -51,41 +51,93 @@ Ticket: [phase-2-infrastructure.md](./tickets/phase-2-infrastructure.md) · **St
 
 ---
 
-## ⏳ Phase 3 — Spotify API Layer
+## ✅ Phase 3 — Spotify API Layer
 
-Ticket: [phase-3-api-layer.md](./tickets/phase-3-api-layer.md) · **Status: pending**
+Ticket: [phase-3-api-layer.md](./tickets/phase-3-api-layer.md) · **Status: done**
 
-- [ ] Zod schemas in `src/types/spotify.ts` (Artist, Track, Album, Paging)
-- [ ] `get-token.ts` (Client Credentials flow)
-- [ ] `search-artists.ts` + mock
-- [ ] `get-artist.ts` + mock
-- [ ] `get-artist-top-tracks.ts` + mock
-- [ ] `get-artist-albums.ts` + mock
-- [ ] All mocks expose `successMock` / `emptyMock` / `errorMock`
+- [x] Zod schemas co-located in each service file (Artist, Track, Album, Paging)
+- [x] `get-token.ts` (Client Credentials flow)
+- [x] `search-artists.ts` + mock
+- [x] `get-artist.ts` + mock
+- [x] `get-artist-top-tracks.ts` + mock
+- [x] `get-artist-albums.ts` + mock
+- [x] All mocks expose `successMock` / `emptyMock` / `errorMock`
 
----
-
-## ⏳ Phase 4 — Login Page
-
-Ticket: [phase-4-login.md](./tickets/phase-4-login.md) · **Status: pending**
-
-- [ ] `src/pages/login/Login.tsx` (glass card, RHF + Zod)
-- [ ] `useLoginForm.ts` (mutation → `SET_TOKEN` → navigate `/`)
-- [ ] Language switcher in top-right
-- [ ] All strings via `t('login.*')`
-- [ ] Visual matches `screens/login.png`
+**Notes**
+- Spec asked for a single `src/types/spotify.ts`, but the `api-requests` skill mandates
+  schemas co-located in each service file — followed the skill. `get-artist.ts` owns the
+  shared `spotifyImageSchema` / `spotifyArtistResponseSchema`, reused by the other services.
+- Endpoint shapes verified against the official Spotify Web API docs (developer.spotify.com).
+- `get-artist-top-tracks` now sends `market` (default `'US'`): with a client-credentials
+  token there is no user country, so Spotify returns zero tracks without it.
 
 ---
 
-## ⏳ Phase 5 — Artist Discovery
+## ✅ Phase 4 — Login Page
 
-Ticket: [phase-5-artist-discovery.md](./tickets/phase-5-artist-discovery.md) · **Status: pending**
+Ticket: [phase-4-login.md](./tickets/phase-4-login.md) · **Status: done**
 
-- [ ] `useArtistDiscovery` hook (`useInfiniteQuery`, debounce 300ms, IntersectionObserver)
-- [ ] `ArtistDiscovery.tsx` page (card grid, no tables)
-- [ ] `HeroBanner`, `FeaturedArtistCard`, `TopPickItem`
-- [ ] `PlayerBar` (fixed footer, global)
-- [ ] Loading skeleton, error state, empty state
+- [x] `src/pages/login/Login.tsx` (glass card, single "Continue with Spotify" CTA)
+- [x] `hooks/useSpotifyLogin.ts` (kicks off PKCE redirect / mock short-circuit → `SET_TOKEN` → `/`)
+- [x] Spotify OAuth **Authorization Code + PKCE** flow (`src/utils/spotify-pkce.ts`)
+- [x] `exchange-code-for-token.ts` service + mock (code → token, no client secret)
+- [x] `/callback` route + `src/pages/callback/Callback.tsx` (validates state, exchanges code)
+- [x] Language switcher in top-right
+- [x] All strings via `t('login.*')`
+- [x] Visual matches `screens/login.png` (glass card, logo, gradient CTA, blobs, footer)
+
+**Notes**
+- **Pivot from the ticket:** user requested **Spotify OAuth** instead of the Client ID/Secret
+  form the ticket described. Implemented Authorization Code + PKCE (recommended for SPAs —
+  no secret in the bundle, supports refresh tokens). The Phase 3 `get-token.ts`
+  (Client Credentials) is now unused by login but left in place.
+- **Mock short-circuit:** with `USE_SPOTIFY_MOCK = true`, the button logs straight in with
+  the mock token (no real redirect), so the portfolio works without a registered redirect
+  URI. With mocks off it redirects to `accounts.spotify.com` for real — requires the app's
+  redirect URI (`<origin>/callback`) registered in the Spotify Dashboard.
+- `VITE_SPOTIFY_CLIENT_ID` is read in `spotify-pkce.ts`; added `src/vite-env.d.ts` to type it.
+- Refresh token is persisted to `localStorage` (`kanaplay_refresh_token`) for a future
+  auto-refresh phase; no refresh logic wired yet.
+- The screenshot's email/password fields + "Remember me / Forgot / Sign Up" were template
+  decoration; replaced by the OAuth button. Unused `login.*` form keys left in i18n.
+
+---
+
+## ✅ Phase 5 — Artist Discovery
+
+Ticket: [phase-5-artist-discovery.md](./tickets/phase-5-artist-discovery.md) · **Status: done**
+
+- [x] `useArtistDiscovery` hook (`useInfiniteQuery`, debounce 300ms, IntersectionObserver)
+- [x] `ArtistDiscovery.tsx` page (card grid, no tables)
+- [x] `HeroBanner`, `FeaturedArtistCard`, `TopPickItem`
+- [x] `PlayerBar` (fixed footer, global)
+- [x] Loading skeleton, error state, empty state
+
+**Notes**
+- **Redesigned to match `screens/artist-discovery.png`** (screenshot landed after the
+  first pass). The page now mirrors the print: curated landing = Hero + Featured Artists
+  (row of image-top cards) + Top Picks (with "View All"). The old inline search bar +
+  artist grid were removed from the page body.
+- **Bug fix (search rendered nothing):** Spotify's `/search` returns **slim** artist
+  objects without `genres` / `followers` / `popularity`, so `spotifyArtistResponseSchema.parse`
+  threw a `ZodError` that React Query swallowed (no console log) → the page fell into its
+  error state. Those three fields are now `.default()`ed in `type.ts`, so search results
+  parse while the full `/artists/{id}` endpoint keeps its real values.
+- **Search moved to the navbar icon** (per design): clicking the icon opens a debounced
+  input that writes `?q=` to the URL. The Discovery page reads `?q` and switches between
+  the curated landing (no query) and a results grid with infinite scroll (Phase 5 feature).
+- Hero + Featured cards fetch the **full artist** (`getArtist`, cached) to show genre
+  labels like the print, since `/search` doesn't include genres.
+- Default browse query `'a'` still populates the curated landing on first load
+  (Spotify's `/search` requires a non-empty `q`).
+- The client-side **album/genre filter was dropped** — not present in the print.
+- Navbar updated to the print style (centered nav + search icon + avatar); language
+  switcher kept (requirement) next to the avatar.
+- `PlayerBar` is wired into `ProtectedLayout` (global on all protected routes) with
+  local UI state — no audio playback. Ticket says "reads from `AppContext`"; the
+  context has no player slice yet, so kept self-contained for now.
+- Custom `.kana-range` slider styling added to `glass.css` (track + thumb in brand
+  colors). Page itself paints `#0d0d0d` over the layout's blobs as the ticket asks.
 
 ---
 

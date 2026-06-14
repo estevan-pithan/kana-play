@@ -35,7 +35,11 @@
     "signUp": "Sign Up",
     "errorMissing": "This field is required.",
     "errorInvalid": "Invalid credentials.",
-    "footerCopy": "© {{year}} KanaPlay"
+    "continueWithSpotify": "Continue with Spotify",
+    "connecting": "Connecting…",
+    "oauthHint": "You'll be redirected to Spotify to sign in securely.",
+    "authError": "Spotify login failed. Please try again.",
+    "footerCopy": "© {{year}} KanaPlay. All rights reserved."
   },
   "artistDiscovery": {
     "trendingNow": "Trending now",
@@ -44,6 +48,8 @@
     "searchPlaceholder": "Search artists…",
     "albumFilterPlaceholder": "Filter by album",
     "loadMore": "Load more",
+    "viewAll": "View All",
+    "searchResultsFor": "Results for \"{{query}}\"",
     "noResults": "No artists found",
     "errorTitle": "We couldn't reach Spotify"
   },

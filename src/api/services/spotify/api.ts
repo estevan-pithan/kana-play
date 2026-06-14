@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { toast } from 'sonner'
 
-export const SPOTIFY_BASE_URL = 'https://api.spotify.com/v1'
-export const SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/api/token'
-export const USE_SPOTIFY_MOCK = true
+export const VITE_SPOTIFY_BASE_URL = import.meta.env.VITE_SPOTIFY_BASE_URL
+export const VITE_SPOTIFY_AUTH_URL = import.meta.env.VITE_SPOTIFY_AUTH_URL
+export const USE_SPOTIFY_MOCK = false
 
 let tokenGetter: () => string | null = () => null
 let onUnauthorized: () => void = () => undefined
@@ -17,7 +17,7 @@ export function setSpotifyAuthHandlers(handlers: { onUnauthorized: () => void })
 }
 
 export const apiSpotify = axios.create({
-  baseURL: SPOTIFY_BASE_URL,
+  baseURL: VITE_SPOTIFY_BASE_URL,
 })
 
 apiSpotify.interceptors.request.use((config) => {

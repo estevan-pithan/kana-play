@@ -58,3 +58,55 @@
     blob-drift 22s ease-in-out infinite reverse,
     blob-pulse 10s ease-in-out infinite;
 }
+
+.kana-range {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  height: 4px;
+  cursor: pointer;
+}
+
+.kana-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    var(--brand-light) 0%,
+    var(--brand-light) calc(var(--value, 0) * 1%),
+    rgba(255, 255, 255, 0.12) calc(var(--value, 0) * 1%),
+    rgba(255, 255, 255, 0.12) 100%
+  );
+}
+
+.kana-range::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.kana-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--brand-light);
+}
+
+.kana-range::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 9999px;
+  background: var(--brand-light);
+  margin-top: -4px;
+  box-shadow: 0 0 0 2px rgba(13, 13, 13, 0.6);
+}
+
+.kana-range::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border: none;
+  border-radius: 9999px;
+  background: var(--brand-light);
+  box-shadow: 0 0 0 2px rgba(13, 13, 13, 0.6);
+}

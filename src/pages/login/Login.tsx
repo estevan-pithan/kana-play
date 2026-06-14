@@ -1,64 +1,70 @@
+import { Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+
 import logo from '@/assets/logo.png'
 import { useApp } from '@/contexts/AppContext'
 import { RESOURCES, type LanguageKey } from '@/langs/resources'
 import { cn } from '@/lib/utils'
+   import { useSpotifyLogin } from './hooks/useSpotifyLogin'
 
 export default function Login() {
   const { t } = useTranslation()
-  const { setToken, state, setLanguage } = useApp()
-  const navigate = useNavigate()
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setToken('placeholder-token')
-    void navigate('/')
-  }
+  const { state, setLanguage } = useApp()
+  const { login, isPending } = useSpotifyLogin()
+  const year = new Date().getFullYear()
 
   return (
-    <main className="relative min-h-screen px-6 py-10">
-      <div className="bg-blob bg-blob--ochre h-96 w-96 -top-24 -left-24" />
-      <div className="bg-blob bg-blob--amber h-[28rem] w-[28rem] bottom-0 right-0" />
+    <main className="relative flex min-h-screen items-center justify-center px-6 py-10">
+      <div className="bg-blob bg-blob--ochre -top-40 -left-40 h-136 w-136" />
+      <div className="bg-blob bg-blob--amber -bottom-32 -right-24 h-96 w-96" />
 
-      <div className="relative z-10 flex flex-col items-center justify-center gap-6">
-        <div className="flex justify-end gap-2 self-end">
-          {(Object.keys(RESOURCES) as LanguageKey[]).map((lang) => (
-            <button
-              key={lang}
-              type="button"
-              onClick={() => {
-                setLanguage(lang)
-              }}
-              className={cn(
-                'rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-colors',
-                state.language === lang
-                  ? 'btn-brand'
-                  : 'border border-white/10 text-white/70 hover:text-white',
-              )}
-            >
-              {RESOURCES[lang].label}
-            </button>
-          ))}
-        </div>
-
-        <section className="glass-card w-full max-w-md p-10 text-center">
-          <img src={logo} alt="" className="mx-auto h-20" />
-          <h1 className="mt-3 text-2xl font-bold">
-            Kana<span className="accent-brand">Play</span>
-          </h1>
-          <p className="mt-1 text-sm text-white/60">{t('login.subtitle')}</p>
-
-          <form className="mt-6 space-y-3" onSubmit={handleSubmit}>
-            <p className="text-xs text-white/50">
-              Phase 4 will replace this with a real Spotify auth form.
-            </p>
-            <button type="submit" className="btn-brand w-full rounded-full px-6 py-2.5">
-              {t('login.submit')}
-            </button>
-          </form>
-        </section>
+      <div className="absolute right-5 top-5 z-20 flex gap-1.5">
+        {(Object.keys(RESOURCES) as LanguageKey[]).map((lang) => (
+          <button
+            key={lang}
+            type="button"
+            onClick={() => {
+              setLanguage(lang)
+            }}
+            className={cn(
+              'rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider transition-colors',
+              state.language === lang
+                ? 'btn-brand'
+                : 'border border-white/10 text-white/60 hover:text-white',
+            )}
+          >
+            {RESOURCES[lang].label}
+          </button>
+        ))}
       </div>
+
+      <section className="glass-card relative z-10 w-full max-w-95 rounded-3xl px-9 py-10 text-center">
+        <div className="mx-auto flex size-20 items-center justify-center rounded-2xl bg-white shadow-lg">
+          <img src={logo} alt="" className="h-18 object-contain" />
+        </div>
+        <h1 className="mt-4 text-2xl font-bold text-white">KanaPlay</h1>
+        <p className="mt-1.5 text-sm text-white/55">{t('login.subtitle')}</p>
+
+        <button
+          type="button"
+          onClick={() => {
+            void login()
+          }}
+          disabled={isPending}
+          className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-full bg-linear-to-r from-brand to-brand-light px-6 py-3 text-sm font-semibold text-bg-deep shadow-lg transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+         null
+          )}
+          {isPending ? t('login.connecting') : t('login.continueWithSpotify')}
+        </button>
+
+        <p className="mt-4 text-xs text-white/40">{t('login.oauthHint')}</p>
+
+        <p className="mt-8 text-[11px] text-white/30">{t('login.footerCopy', { year })}</p>
+      </section>
     </main>
   )
 }
