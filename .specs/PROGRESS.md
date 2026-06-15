@@ -179,15 +179,32 @@ Ticket: [change-navbar-discovery.md](./tickets/change-navbar-discovery.md) · **
 
 ---
 
-## ⏳ Phase 6 — Artist Profile
+## ✅ Phase 6 — Artist Profile
 
-Ticket: [phase-6-artist-profile.md](./tickets/phase-6-artist-profile.md) · **Status: pending**
+Ticket: [phase-6-artist-profile.md](./tickets/phase-6-artist-profile.md) · **Status: done**
 
-- [ ] `ArtistProfile.tsx` page (`/artist/:id`)
-- [ ] `ArtistHero`, `TopTracksList`, `AboutArtistCard`, `FansAlsoLike`
-- [ ] `AddFavoriteDialog` (RHF + Zod, pre-filled)
-- [ ] Tabs: Top Tracks (paginated 10/page) + Albums (paginated)
-- [ ] Duration formatted as mm:ss
+- [x] `ArtistProfile.tsx` page (`/artist/:id`) — built from `screens/profile.html` (liquid-glass design)
+- [x] `ArtistHero` (full-bleed backdrop, verified badge, gradient name, genres, play/follow/more)
+- [x] `AlbumsTable` — real `<table>`, offset-paginated (8/page), Prev/Next pager, no infinite scroll
+- [x] `AlbumTracksView` — selecting an album swaps the frame to its tracks
+- [x] `AddFavoriteDialog` (RHF + Zod, pre-filled) — opens from a track row
+- [x] Duration formatted as mm:ss; release dates localized
+- [x] `getAlbumTracks` service + mock (GET /albums/{id}/tracks)
+
+**Notes**
+- **Pivot from the ticket:** the live Spotify API stopped returning `followers`,
+  `popularity` **and the artist top-tracks endpoint** for this app, so those were
+  dropped per the user. The page now centers on a **paginated albums table**; clicking
+  an album switches the frame to that album's track list.
+- **Back navigation:** in album-tracks view a chevron-left (`common.back`) runs
+  `navigate(-1)` to return to the screen the user came from (Home/search), per the
+  user's choice. Album selection is local state (no history push), so back exits the
+  profile rather than returning to the album list.
+- `ArtistHero` shows genres in place of the removed follower/popularity stat pills.
+- Removed the originally-planned `TopTracksList`, `AboutArtistCard`, `FansAlsoLike`
+  components (About + Fans sections cut per user request).
+- The shadcn `Tabs` (Top Tracks / Albums) from the ticket were not used — the design
+  has a single switchable frame, not tabs.
 
 ---
 

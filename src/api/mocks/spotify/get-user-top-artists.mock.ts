@@ -14,9 +14,6 @@ const items: SpotifyArtist[] = [
         width: 640,
       },
     ],
-    genres: ['pop'],
-    followers: { total: 110_000_000 },
-    popularity: 100,
     external_urls: { spotify: 'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02' },
   },
   {
@@ -29,9 +26,6 @@ const items: SpotifyArtist[] = [
         width: 640,
       },
     ],
-    genres: ['pop', 'r&b'],
-    followers: { total: 95_000_000 },
-    popularity: 95,
     external_urls: { spotify: 'https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ' },
   },
   {
@@ -44,9 +38,6 @@ const items: SpotifyArtist[] = [
         width: 640,
       },
     ],
-    genres: ['pop'],
-    followers: { total: 115_000_000 },
-    popularity: 92,
     external_urls: { spotify: 'https://open.spotify.com/artist/6eUKZXaKkcviH0Ku9w2n3V' },
   },
   {
@@ -59,9 +50,6 @@ const items: SpotifyArtist[] = [
         width: 640,
       },
     ],
-    genres: ['hip hop', 'pop'],
-    followers: { total: 50_000_000 },
-    popularity: 90,
     external_urls: { spotify: 'https://open.spotify.com/artist/246dkjvS1zLTtiykXe5h60' },
   },
 ]

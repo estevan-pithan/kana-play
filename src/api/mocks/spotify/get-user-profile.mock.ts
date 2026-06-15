@@ -11,8 +11,6 @@ export const getUserProfileSuccessMock: SpotifyUserProfile = {
       width: 96,
     },
   ],
-  country: 'BR',
-  product: 'premium',
   external_urls: { spotify: 'https://open.spotify.com/user/kanaplay-demo' },
 }
 

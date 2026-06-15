@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Plus } from 'lucide-react'
 
 import type { SpotifyTrack } from '@/api/services/spotify/type'
+import { FavoriteButton } from '@/components/favorites/FavoriteButton'
 
 function formatDuration(ms: number) {
   const totalSeconds = Math.floor(ms / 1000)
@@ -51,6 +52,10 @@ export function TrackRow({ track, onAdd, variant = 'carousel', rank }: TrackRowP
         <p className="truncate text-sm font-semibold text-white">{track.name}</p>
         <p className="truncate text-xs text-white/50">{artistNames}</p>
       </div>
+      <FavoriteButton
+        className="shrink-0"
+        defaults={{ trackName: track.name, artist: artistNames, album: track.album.name }}
+      />
       <span className="shrink-0 text-xs text-white/40">
         {formatDuration(track.duration_ms)}
       </span>

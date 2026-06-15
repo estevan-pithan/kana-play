@@ -8,7 +8,8 @@ export type { SpotifyAlbum } from './type'
 
 export const getArtistAlbumsInputSchema = z.object({
   id: z.string(),
-  limit: z.number().min(1).max(50).optional(),
+  // Spotify caps `/artists/{id}/albums?limit` at 10 (unlike most paged endpoints).
+  limit: z.number().min(1).max(10).optional(),
   offset: z.number().min(0).optional(),
 })
 

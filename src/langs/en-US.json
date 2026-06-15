@@ -74,7 +74,6 @@
   "artistProfile": {
     "verifiedArtist": "Verified Artist",
     "monthlyListeners": "Monthly Listeners",
-    "followers": "Followers",
     "topTracks": "Top Tracks",
     "albums": "Albums",
     "aboutTitle": "About the Artist",
@@ -85,6 +84,7 @@
     "backToAlbums": "Back to albums",
     "pageOf": "Page {{page}} of {{total}}",
     "addFavorite": "Add to favorites",
+    "removeFavorite": "Remove from favorites",
     "playCount": "Plays",
     "duration": "Duration",
     "tableTitle": "Title",

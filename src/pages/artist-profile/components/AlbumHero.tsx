@@ -1,25 +1,28 @@
 import { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BadgeCheck, Play } from 'lucide-react'
+import { Play } from 'lucide-react'
 
-import type { SpotifyArtist } from '@/api/services/spotify/type'
+import type { SpotifyAlbum } from '@/api/services/spotify/type'
+import { formatReleaseDate } from '../utils'
 
-interface ArtistHeroProps {
-  artist: SpotifyArtist
+interface AlbumHeroProps {
+  album: SpotifyAlbum
   backButton?: ReactNode
 }
 
-export function ArtistHero({ artist, backButton }: ArtistHeroProps) {
+/** Full-bleed hero for a single album — its cover fills the background. */
+export function AlbumHero({ album, backButton }: AlbumHeroProps) {
   const { t } = useTranslation()
-  const backdrop = artist.images[0]?.url
+  const cover = album.images[0]?.url
+  const artistNames = album.artists.map((a) => a.name).join(', ')
 
   return (
     <section className="relative flex w-full items-end pt-4">
-      {/* Full-bleed backdrop with gradient blends */}
+      {/* Full-bleed album cover with gradient blends */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {backdrop && (
+        {cover && (
           <img
-            src={backdrop}
+            src={cover}
             alt=""
             className="h-full w-full object-cover opacity-50 mix-blend-luminosity"
           />
@@ -34,7 +37,12 @@ export function ArtistHero({ artist, backButton }: ArtistHeroProps) {
           <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
 
           <div className="relative z-10 flex flex-col items-center">
-            {/* Verified badge */}
+            {/* Cover thumbnail */}
+            <div className="mb-6 h-36 w-36 overflow-hidden rounded-xl border border-white/10 bg-white/10 shadow-2xl md:h-44 md:w-44">
+              {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
+            </div>
+
+            {/* Album type badge */}
             <div
               className="mb-4 inline-flex w-max items-center gap-2 rounded-full px-3 py-1"
               style={{
@@ -44,15 +52,20 @@ export function ArtistHero({ artist, backButton }: ArtistHeroProps) {
                 WebkitBackdropFilter: 'blur(10px)',
               }}
             >
-              <BadgeCheck className="h-3.5 w-3.5 text-brand-light" />
               <span className="text-xs font-semibold uppercase tracking-wider text-white/90">
-                {t('artistProfile.verifiedArtist')}
+                {album.album_type}
               </span>
             </div>
 
-            <h1 className="mb-5 bg-linear-to-r from-brand-light via-brand to-brand-light bg-clip-text text-5xl font-bold tracking-tight text-transparent drop-shadow-2xl md:text-7xl">
-              {artist.name}
+            <h1 className="mb-4 bg-linear-to-r from-brand-light via-brand to-brand-light bg-clip-text text-4xl font-bold tracking-tight text-transparent drop-shadow-2xl md:text-6xl">
+              {album.name}
             </h1>
+
+            <p className="mb-1 text-lg font-semibold text-white">{artistNames}</p>
+            <p className="mb-6 text-sm text-white/50">
+              {formatReleaseDate(album.release_date)} ·{' '}
+              {t('artistDiscovery.trackCount', { count: album.total_tracks })}
+            </p>
 
             {/* Actions */}
             <div className="mt-2 flex items-center gap-4">

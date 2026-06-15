@@ -9,10 +9,7 @@ import {
 } from 'react'
 import i18n from '@/langs/i18n'
 import { type LanguageKey } from '@/langs/resources'
-import {
-  setSpotifyAuthHandlers,
-  setSpotifyTokenGetter,
-} from '@/api/services/spotify/api'
+import { setSpotifyAuthHandlers, setSpotifyTokenGetter } from '@/api/services/spotify/api'
 import { readStorage, writeStorage } from '@/utils/storage'
 
 type Theme = 'light' | 'dark'

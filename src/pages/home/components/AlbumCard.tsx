@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import type { SpotifyAlbum } from '@/api/services/spotify/type'
 
 interface AlbumCardProps {
@@ -7,13 +9,10 @@ interface AlbumCardProps {
 export function AlbumCard({ album }: AlbumCardProps) {
   const cover = album.images[0]?.url
   const year = album.release_date?.slice(0, 4)
-  const artistName = album.artists[0]?.name
+  const artist = album.artists[0]
 
-  return (
-    <div
-      className="group block w-[160px] shrink-0 space-y-2"
-      style={{ scrollSnapAlign: 'start' }}
-    >
+  const inner = (
+    <>
       <div className="aspect-square w-full overflow-hidden rounded-xl bg-white/10">
         {cover && (
           <img
@@ -27,9 +26,27 @@ export function AlbumCard({ album }: AlbumCardProps) {
       <div>
         <p className="truncate text-sm font-semibold text-white">{album.name}</p>
         <p className="truncate text-xs text-white/50">
-          {[artistName, year].filter(Boolean).join(' · ')}
+          {[artist?.name, year].filter(Boolean).join(' · ')}
         </p>
       </div>
+    </>
+  )
+
+  const className = 'group block w-[160px] shrink-0 space-y-2'
+  const style = { scrollSnapAlign: 'start' } as const
+
+  // Open the album's artist page with this album pre-selected so its tracks load.
+  if (artist) {
+    return (
+      <Link to={`/artist/${artist.id}`} state={{ album }} className={className} style={style}>
+        {inner}
+      </Link>
+    )
+  }
+
+  return (
+    <div className={className} style={style}>
+      {inner}
     </div>
   )
 }

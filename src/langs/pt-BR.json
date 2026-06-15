@@ -74,7 +74,6 @@
   "artistProfile": {
     "verifiedArtist": "Artista verificado",
     "monthlyListeners": "Ouvintes mensais",
-    "followers": "Seguidores",
     "topTracks": "Mais tocadas",
     "albums": "Álbuns",
     "aboutTitle": "Sobre o artista",
@@ -85,6 +84,7 @@
     "backToAlbums": "Voltar para álbuns",
     "pageOf": "Página {{page}} de {{total}}",
     "addFavorite": "Adicionar aos favoritos",
+    "removeFavorite": "Remover dos favoritos",
     "playCount": "Reproduções",
     "duration": "Duração",
     "tableTitle": "Título",

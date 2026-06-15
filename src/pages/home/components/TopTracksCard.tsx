@@ -38,10 +38,7 @@ export function TopTracksCard({ title, section }: TopTracksCardProps) {
       {isLoading && (
         <div className="flex flex-col gap-2">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-14 animate-pulse rounded-xl bg-white/[0.05]"
-            />
+            <div key={i} className="h-14 animate-pulse rounded-xl bg-white/5" />
           ))}
         </div>
       )}
@@ -60,12 +57,7 @@ export function TopTracksCard({ title, section }: TopTracksCardProps) {
           className="hide-scrollbar -mx-2 flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-2"
         >
           {items.map((track, index) => (
-            <TrackRow
-              key={track.id}
-              track={track}
-              variant="list"
-              rank={index + 1}
-            />
+            <TrackRow key={track.id} track={track} variant="list" rank={index + 1} />
           ))}
           {isFetchingNextPage && (
             <div className="grid place-items-center py-3">

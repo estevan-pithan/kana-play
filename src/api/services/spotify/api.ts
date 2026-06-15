@@ -33,11 +33,27 @@ apiSpotify.interceptors.response.use(
   (error: unknown) => {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status
+      const data = error.response?.data as { error?: { message?: string } } | undefined
+      const message = data?.error?.message
+
       if (status === 401) {
         onUnauthorized()
-      } else if (status === 400) {
-        const data = error.response?.data as { error?: { message?: string } } | undefined
-        toast.error(data?.error?.message ?? 'Spotify request failed.')
+      } else if (status === 429) {
+        // Spotify hints at the cooldown via the `Retry-After` header (in seconds).
+        const retryAfter = Number(error.response?.headers?.['retry-after'])
+        toast.error(
+          message ??
+            (Number.isFinite(retryAfter) && retryAfter > 0
+              ? `Spotify rate limit reached. Try again in ${retryAfter}s.`
+              : 'Spotify rate limit reached. Please try again shortly.'),
+        )
+      } else if (status === 400 || status === 403 || status === 404) {
+        toast.error(message ?? 'Spotify request failed.')
+      } else if (status !== undefined && status >= 500) {
+        toast.error(message ?? 'Spotify is unavailable right now. Please try again later.')
+      } else if (status === undefined) {
+        // No response (network/CORS): fall through with a generic notice.
+        toast.error('Network error reaching Spotify.')
       }
     }
     return Promise.reject(error as Error)

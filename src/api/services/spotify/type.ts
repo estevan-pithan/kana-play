@@ -26,13 +26,6 @@ export const spotifyArtistResponseSchema = z.object({
   id: z.string(),
   name: z.string(),
   images: z.array(spotifyImageSchema).default([]),
-  // The `/search` endpoint returns slim artist objects WITHOUT genres,
-  // followers or popularity — those only come from the full `/artists/{id}`
-  // endpoint. Defaulted so search results parse while full objects keep their
-  // real values, and downstream code can always read them safely.
-  genres: z.array(z.string()).default([]),
-  followers: z.object({ total: z.number() }).default({ total: 0 }),
-  popularity: z.number().default(0),
   external_urls: z.object({ spotify: z.string() }),
 })
 
@@ -97,8 +90,6 @@ export const spotifyUserProfileSchema = z.object({
   display_name: z.string().nullable().default(null),
   email: z.string().optional(),
   images: z.array(spotifyImageSchema).default([]),
-  country: z.string().optional(),
-  product: z.string().optional(),
   external_urls: z.object({ spotify: z.string() }),
 })
 

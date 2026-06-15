@@ -8,7 +8,6 @@ interface ArtistCardProps {
 
 export function ArtistCard({ artist }: ArtistCardProps) {
   const cover = artist.images[0]?.url
-  const genre = artist.genres[0]
 
   return (
     <Link
@@ -28,9 +27,6 @@ export function ArtistCard({ artist }: ArtistCardProps) {
       </div>
       <div className="w-full text-center">
         <p className="truncate text-sm font-semibold text-white">{artist.name}</p>
-        {genre && (
-          <p className="truncate text-xs capitalize text-white/50">{genre}</p>
-        )}
       </div>
     </Link>
   )
