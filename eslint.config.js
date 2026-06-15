@@ -24,9 +24,41 @@ export default defineConfig([
     },
   },
   {
-    files: ['e2e/**/*.{ts,tsx}', '*.config.{ts,js}', 'src/test/**/*.{ts,tsx}', 'src/contexts/**/*.{ts,tsx}'],
+    files: [
+      'e2e/**/*.{ts,tsx}',
+      '*.config.{ts,js}',
+      'src/test/**/*.{ts,tsx}',
+      'src/contexts/**/*.{ts,tsx}',
+    ],
+    plugins: {
+      'react-hooks': reactHooks,
+      'unused-imports': unusedImports,
+      prettier: prettier,
+    },
     rules: {
-      'react-refresh/only-export-components': 'off',
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+      'prettier/prettier': 'warn',
+      'unused-imports/no-unused-imports': 'warn',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 ])
