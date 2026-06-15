@@ -62,6 +62,13 @@ Ticket: [phase-3-api-layer.md](./tickets/phase-3-api-layer.md) · **Status: done
 - [x] `get-artist-top-tracks.ts` + mock
 - [x] `get-artist-albums.ts` + mock
 - [x] All mocks expose `successMock` / `emptyMock` / `errorMock`
+- [x] `get-user-playlists.ts` + mock (GET /me/playlists)
+- [x] `get-user-top-artists.ts` + mock (GET /me/top/artists)
+- [x] `get-user-top-tracks.ts` + mock (GET /me/top/tracks)
+- [x] `get-followed-artists.ts` + mock (GET /me/following?type=artist)
+- [x] `get-saved-albums.ts` + mock (GET /me/albums)
+- [x] `get-user-profile.ts` + mock (GET /me)
+- [x] `search.ts` — generic search supporting `all` (multi-type fan-out) + single type
 
 **Notes**
 - Spec asked for a single `src/types/spotify.ts`, but the `api-requests` skill mandates
@@ -138,6 +145,37 @@ Ticket: [phase-5-artist-discovery.md](./tickets/phase-5-artist-discovery.md) · 
   context has no player slice yet, so kept self-contained for now.
 - Custom `.kana-range` slider styling added to `glass.css` (track + thumb in brand
   colors). Page itself paints `#0d0d0d` over the layout's blobs as the ticket asks.
+- **SUPERSEDED by Change ticket:** The Discovery page and Navbar are being refactored. See [change-navbar-discovery.md](./tickets/change-navbar-discovery.md).
+
+---
+
+## ✅ Change — Navbar Redesign + Home Discovery Refactor
+
+Ticket: [change-navbar-discovery.md](./tickets/change-navbar-discovery.md) · **Status: done**
+
+- [x] `Navbar.tsx` — substituir implementação (remover links centrais)
+- [x] `SearchPill.tsx` — input + select grudados em pill liquid glass
+- [x] `SearchTypeSelect.tsx` — select All/Artists/Albums/Music/Playlists → `?type=`
+- [x] `UserMenu.tsx` — avatar dropdown (Insights, Idioma, Logout)
+- [x] Ícone Home (lucide:Home) ao lado do logo → `/`
+- [x] `FilterChips.tsx` — chips liquid glass sincronizados com `?type=`
+- [x] `SectionRow.tsx` — componente genérico de seção com scroll horizontal
+- [x] `PlaylistCard.tsx`, `ArtistCard.tsx`, `TrackRow.tsx`, `AlbumCard.tsx`
+- [x] `useHomeData.ts` — 5 queries em paralelo
+- [x] `useSearchResults.ts` — infinite scroll por query
+- [x] `ArtistDiscovery.tsx` — refatorado (sem hero banner, 5 seções + modo busca)
+- [x] Remover: `HeroBanner.tsx`, `FeaturedArtistCard.tsx`, `TopPickItem.tsx`, `useArtistDiscovery.ts`
+- [x] i18n: novas chaves `nav.home`, `nav.searchPlaceholder`, `nav.logout`, `nav.typeAll`, etc.
+- [x] `dropdown-menu.tsx` (Shadcn) + `@radix-ui/react-dropdown-menu` instalado
+
+**Notes**
+- Navbar agora é um grid 3 colunas: logo+Home / SearchPill / UserMenu. Sem links de texto centrais.
+- `?q=` e `?type=` são a única fonte de verdade — `SearchPill`, `SearchTypeSelect` e `FilterChips` apenas leem/escrevem nesses parâmetros.
+- `search.ts` substitui `useArtistDiscovery`. Suporta `all` (fan-out paralelo de 4 chamadas com interleave round-robin) e tipo único.
+- FilterChips na Home filtra quais seções aparecem: `all` mostra todas; `artist` mostra Top Artists + Followed Artists; `album` → Saved Albums; `track` → Top Tracks; `playlist` → Top Playlists.
+- Card de busca renderiza por kind (Artist/Album/Playlist como card 160px, Track ocupa linha inteira).
+- `UserMenu` lê `/me` via `getUserProfile`; fallback com inicial em gradiente brand quando não há avatar.
+- Schemas movidos para `type.ts` (album, track, playlist, user profile, paging genérico) — services antigos re-exportam os tipos para não quebrar imports.
 
 ---
 

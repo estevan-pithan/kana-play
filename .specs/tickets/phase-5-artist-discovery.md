@@ -1,74 +1,76 @@
-# Phase 5 — Artist Discovery Page (Infinite Scroll)
+# Phase 5 — Artist Discovery Page
 
 ## Goal
 
-Implement the main Artist Discovery page with infinite scroll, search, and filter functionality using a card grid layout.
+Implement the Home / Artist Discovery page with Filter Chips liquid glass, search integrated in the navbar, and 5 personalized content sections for the authenticated user. No hero banner.
 
-## Reference
+## Status: Done ✅ — refactored by Change ticket (`change-navbar-discovery.md`)
 
-Reference screen: `screens/artist-discovery.png` — agent must request the user to upload this image before implementing.
+> ⚠️ **This page is being refactored.** The original delivery (Hero Banner + 2-column layout) is superseded by the Change ticket (`change-navbar-discovery.md`). The new implementation replaces HeroBanner, FeaturedArtistCard, and TopPickItem with 5 user-data sections.
 
-> ⚠️ Instruction for the agent: Before starting the implementation of this screen, ask the user to upload the `artist-discovery.png` image directly in the chat. Analyze the image pixel by pixel to ensure the layout, spacing, colors, typography, and element arrangement are identical to the screenshot. Do not assume any visual detail without confirming it in the image.
+## Original delivery (Phase 5)
 
-## Tasks
+- `useArtistDiscovery` hook (useInfiniteQuery, debounce 300ms, IntersectionObserver)
+- `ArtistDiscovery.tsx` page (Hero + Featured Artists + Top Picks)
+- `HeroBanner.tsx`, `FeaturedArtistCard.tsx`, `TopPickItem.tsx`
+- `PlayerBar.tsx` (fixed footer, global)
+- Loading skeleton, error state, empty state
 
-### Hook: `src/pages/artist-discovery/hooks/useArtistDiscovery.ts`
+## New implementation (Change ticket)
 
-- `useInfiniteQuery` calling `searchArtists({ query, limit: 20, offset })`:
-  - `queryKey`: `['artists', debouncedQuery]`
-  - `getNextPageParam`: uses `offset + limit < total` to determine next offset
-  - `initialPageParam`: `0`
-- Debounced search query (300 ms) via `setTimeout` in `useEffect`
-- `IntersectionObserver` on `loadMoreRef` sentinel div → calls `fetchNextPage()`
-- Album filter: client-side filter on loaded artists' albums (or secondary search)
-- Returns: `artists`, `isLoading`, `isError`, `isFetchingNextPage`, `hasNextPage`, `loadMoreRef`, `query`, `setQuery`, `albumFilter`, `setAlbumFilter`
+### Two modes
 
-### Page: `src/pages/artist-discovery/ArtistDiscovery.tsx`
+**Home mode** (no `?q=` in URL):
+- `FilterChips` at top (All / Artists / Albums / Music / Playlists)
+- 5 horizontal scroll sections via `SectionRow`:
+  1. Top Playlists — `getUserPlaylists` — `PlaylistCard`
+  2. Top Artists — `getUserTopArtists` — `ArtistCard` (circular photo)
+  3. Top Tracks — `getUserTopTracks` — `TrackRow`
+  4. Followed Artists — `getFollowedArtists` — `ArtistCard`
+  5. Saved Albums — `getSavedAlbums` — `AlbumCard`
+- Background: `#0d0d0d`, no hero banner, no blobs
+- No tables anywhere
 
-Layout faithful to the `artist-discovery.png` screenshot:
+**Search mode** (`?q=` present in URL):
+- Infinite scroll results grid
+- Type filtered by `?type=` (all / artist / album / track / playlist)
+- Loading skeleton + error state + empty state
 
-- **Navbar** at top: logo (cheese) + KanaPlay on the left · centered links Discover / Browse / Radio · search + avatar icons on the right
-- **Hero Banner**: large card with a concert photo, "TRENDING NOW" badge (yellow), artist title, description, "▶ Listen Now" button (ochre gradient) + heart button
-- **Content in 2 columns**:
-  - Left: "Featured Artists" section with 3 horizontal cards (square photo + name + genre)
-  - Right: "Top Picks For You" — vertical list of 3 tracks with thumbnail, name, artist, and a "+" button
-- **Player bar** fixed at the footer: thumbnail + name/artist + heart on the left · centered controls (shuffle, prev, play, next, repeat) + progress bar · mic/queue/volume icons on the right
-- Background: `#0d0d0d` (warm black), no animated blobs
+### Components (new)
 
-### Component: `src/pages/artist-discovery/components/HeroBanner.tsx`
+| Component | Description |
+|---|---|
+| `FilterChips.tsx` | Liquid glass chips, synced with `?type=` URL param |
+| `SectionRow.tsx` | Generic section with horizontal scroll + skeleton |
+| `PlaylistCard.tsx` | 160px cover + name + track count |
+| `ArtistCard.tsx` | 140px circular photo + name + genre → `/artist/:id` |
+| `TrackRow.tsx` | 48px thumbnail + name + artist + duration + "+" button |
+| `AlbumCard.tsx` | 160px cover + name + artist + year |
 
-- Receives `featuredArtist: SpotifyArtist` as a prop
-- Card with `border-radius: 16px`, background photo with dark gradient overlay
-- "TRENDING NOW" badge with an animated yellow dot
-- Large title, description, action buttons
+### Hooks (new)
 
-### Component: `src/pages/artist-discovery/components/FeaturedArtistCard.tsx`
+| Hook | Description |
+|---|---|
+| `useHomeData.ts` | 5 parallel useQuery calls for home sections |
+| `useSearchResults.ts` | useInfiniteQuery for search mode (20 items/page) |
 
-- Square photo with `border-radius: 10px`
-- Artist name in bold, genre in gray below
-- Click → navigates to `/artist/:id`
+### Components to remove
 
-### Component: `src/pages/artist-discovery/components/TopPickItem.tsx`
-
-- 40x40px thumbnail, track name, artist, circular "+" button
-- Background: `rgba(255,255,255,0.04)` with subtle border
-
-### Component: `src/components/layout/PlayerBar.tsx`
-
-- Global component, fixed at the footer on all protected pages
-- Reads player state from `AppContext`
-- Controls: shuffle, prev, play/pause, next, repeat
-- Interactive progress bar
-- Volume slider
+- `HeroBanner.tsx`
+- `FeaturedArtistCard.tsx`
+- `TopPickItem.tsx`
 
 ## Acceptance Criteria
 
-- Initial load fetches 20 artists
-- Scrolling to bottom triggers `fetchNextPage()` and appends new cards
-- Typing in search input debounces 300 ms then re-fetches
-- No tables used anywhere on this page
-- Loading skeletons shown during initial fetch
-- Error state shown when API fails
-- Empty state shown when search returns 0 results
-- Clicking a card navigates to `/artist/:id`
-- All strings use `t()`
+- Home displays 5 sections with real or mock user data
+- FilterChips filter visible sections correctly
+- Active chip synced with `?type=` URL param
+- Search mode activated by typing in navbar: infinite scroll 20 items/page
+- Scrolling to bottom triggers `fetchNextPage()`
+- No tables in any section
+- Loading skeletons per section during fetch
+- Error state when API fails
+- Empty state when search returns 0 results
+- Click on artist card navigates to `/artist/:id`
+- No hero banner "TRENDING NOW"
+- All strings via `t()`
