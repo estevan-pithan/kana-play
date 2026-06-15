@@ -208,28 +208,68 @@ Ticket: [phase-6-artist-profile.md](./tickets/phase-6-artist-profile.md) · **St
 
 ---
 
-## ⏳ Phase 7 — My Collection
+## ⏭️ Phase 7 — My Collection
 
-Ticket: [phase-7-my-collection.md](./tickets/phase-7-my-collection.md) · **Status: pending**
+Ticket: [phase-7-my-collection.md](./tickets/phase-7-my-collection.md) · **Status: skipped (deferred per user request)**
 
-- [ ] `MyCollection.tsx` page (`/collection`)
-- [ ] `LibrarySidebar`, `LikedSongsGrid`
-- [ ] `AddFavoriteForm` (RHF + Zod, min 2 chars)
-- [ ] Remove with confirmation
-- [ ] Empty state
+- [-] `MyCollection.tsx` page (`/collection`)
+- [-] `LibrarySidebar`, `LikedSongsGrid`
+- [-] `AddFavoriteForm` (RHF + Zod, min 2 chars)
+- [-] Remove with confirmation
+- [-] Empty state
+
+**Notes**
+- Skipped to implement Phase 8 first, per user request (2026-06-15). Route + page stub
+  remain wired in the router; revisit later.
 
 ---
 
-## ⏳ Phase 8 — Insights Dashboard
+## ✅ Phase 8 — Insights Dashboard
 
-Ticket: [phase-8-insights.md](./tickets/phase-8-insights.md) · **Status: pending**
+Ticket: [phase-8-insights.md](./tickets/phase-8-insights.md) · **Status: done**
 
-- [ ] `Insights.tsx` page (`/insights`)
-- [ ] `InsightsSidebar`
-- [ ] `ListeningTrendsChart` (Recharts LineChart)
-- [ ] `MonthlyFavoritesChart` (Recharts donut PieChart)
-- [ ] `StatCards` (Hours Played, New Artists, Top Genre)
-- [ ] Extend `AppContext` with `searchResults` + `listeningHistory` (note: not in original Phase 2 shape)
+- [x] `Insights.tsx` page (`/insights`) — built from `screens/insights.html` (sidebar + charts + stat cards)
+- [x] `InsightsSidebar` (Overview active, History/Top Charts/Global Stats, Export Report)
+- [x] `ListeningTrendsChart` (Recharts area/line) — real listening hours/day, last 7 days
+- [x] `TopArtistsChart` (Recharts donut) — real top artists by recent play count
+- [x] `StatCards` (Hours Played, New Artists, Top Artist)
+- [x] `useInsightsData` — React Query hook combining `/me/top/artists` + `/me/player/recently-played`
+- [x] `get-recently-played.ts` service + mock (GET /me/player/recently-played)
+- [x] `get-saved-tracks.ts` service + mock (GET /me/tracks — Library Stats total)
+- [x] Period selector (Week/Month/Year) → `time_range` (short/medium/long_term) on `/me/top/*`
+- [x] **Functional sidebar tabs** (Overview / History / Top Charts / Library Stats)
+- [x] Loading / error / empty states; all strings via `t('insights.*')`
+
+**Notes**
+- **Pivot from the ticket: 100% real Spotify data, no simulation** (per user request,
+  2026-06-15). The ticket's simulated `AppContext.searchResults` + `listeningHistory`
+  were **not** added — instead everything is derived from two real endpoints:
+  `/me/top/artists` (scoped by the period selector) and `/me/player/recently-played`.
+- **Genre dropped:** Spotify no longer returns `genres`/`followers` for this app (also
+  marked `deprecated` in `doc.yaml`), so the genre-based widgets were re-labelled to
+  **artists**: "Monthly Favorites" donut → **Top Artists** (by recent play count),
+  "Top Genre" card → **Top Artist** (`/me/top/artists[0]`).
+- **Listening Trends** is a single real series (hours/day over the last 7 days from
+  recently-played). The design's "This Month vs Last Month" two-line view is impossible:
+  `/me/player/recently-played` returns only the ~50 most recent plays, not two months.
+- **Stat cards** show real values with no fabricated deltas: Hours Played = Σ duration of
+  recently-played; New Artists = recently-played artists not in your top artists; Top
+  Artist = #1 top artist for the selected period.
+- Charts are toggled by `USE_SPOTIFY_MOCK` like every other service (mock exposes
+  `successMock`/`emptyMock`/`errorMock`); the mock builds timestamps relative to load
+  time so the trend always covers the last several days.
+- Navbar / PlayerBar / background blobs come from `ProtectedLayout`, so the page itself
+  only renders the sidebar + main content.
+- **Sidebar tabs are functional** (the ticket's were decorative). Each is real data:
+  - **Overview** → charts + stat cards (above).
+  - **History** → `/me/player/recently-played` as a track list with relative timestamps.
+  - **Top Charts** → ranked `/me/top/artists` + `/me/top/tracks` (scoped by the period selector).
+  - **Library Stats** → replaced the spec's **Global Stats** (Spotify exposes no worldwide
+    stats; `/browse/*` is deprecated like genres). Shows real account totals: Liked Songs
+    (`/me/tracks`), Saved Albums (`/me/albums`), Playlists (`/me/playlists`), Following
+    (`/me/following`) — each read from the endpoint's `total` field.
+- The period selector only renders on Overview + Top Charts (the only views scoped by
+  `time_range`); History and Library Stats hide it.
 
 ---
 

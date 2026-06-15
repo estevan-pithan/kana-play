@@ -11,6 +11,10 @@ const SCOPES = [
   'playlist-modify-private',
   'playlist-modify-public',
   'user-follow-read',
+  'user-read-recently-played',
+  'user-read-playback-state',
+  'user-read-currently-playing',
+  'user-modify-playback-state',
 ]
 
 const VERIFIER_KEY = 'kanaplay_pkce_verifier'
