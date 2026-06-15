@@ -35,7 +35,7 @@ export function PlayerBar() {
         borderColor: 'rgba(255, 255, 255, 0.08)',
       }}
     >
-      <div className="mx-auto grid h-20 w-full max-w-[1400px] grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)] items-center gap-4 px-6">
+      <div className="mx-auto grid h-24 w-full max-w-7xl grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)] items-center gap-4 px-6">
         <div className="flex items-center gap-3 min-w-0">
           <div
             className="h-12 w-12 shrink-0 overflow-hidden rounded-md bg-white/10"
@@ -92,7 +92,7 @@ export function PlayerBar() {
               onClick={() => {
                 setIsPlaying((prev) => !prev)
               }}
-              className="btn-brand inline-flex h-9 w-9 items-center justify-center rounded-full"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-transform hover:scale-105"
             >
               {isPlaying ? (
                 <Pause className="h-4 w-4 fill-current" />

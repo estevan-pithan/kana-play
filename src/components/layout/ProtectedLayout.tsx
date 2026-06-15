@@ -8,7 +8,7 @@ export function ProtectedLayout() {
       <div className="bg-blob bg-blob--ochre h-[28rem] w-[28rem] -top-32 -left-32" />
       <div className="bg-blob bg-blob--amber h-96 w-96 right-0 top-1/3" />
       <Navbar />
-      <main className="relative z-10 pb-24">
+      <main className="relative z-10 pb-28">
         <Outlet />
       </main>
       <PlayerBar />
