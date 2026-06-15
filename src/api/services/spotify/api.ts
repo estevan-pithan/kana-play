@@ -5,7 +5,7 @@ import i18n from '@/langs/i18n'
 
 export const VITE_SPOTIFY_BASE_URL = import.meta.env.VITE_SPOTIFY_BASE_URL
 export const VITE_SPOTIFY_AUTH_URL = import.meta.env.VITE_SPOTIFY_AUTH_URL
-export const USE_SPOTIFY_MOCK = false
+export const USE_SPOTIFY_MOCK = import.meta.env.VITE_USE_SPOTIFY_MOCK === 'true'
 
 let tokenGetter: () => string | null = () => null
 let onUnauthorized: () => void = () => undefined

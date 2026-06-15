@@ -20,5 +20,10 @@ export default defineConfig({
     command: 'bun run dev',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
+    env: {
+      // Run the app fully offline against the Spotify mocks so E2E is deterministic
+      // (no OAuth, no Premium token, no live network).
+      VITE_USE_SPOTIFY_MOCK: 'true',
+    },
   },
 })

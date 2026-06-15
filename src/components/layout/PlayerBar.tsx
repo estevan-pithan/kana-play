@@ -1,17 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  Mic2,
-  Pause,
-  Play,
-  Repeat,
-  Repeat1,
-  Shuffle,
-  SkipBack,
-  SkipForward,
-  Volume2,
-  ListMusic,
-} from 'lucide-react'
+import { Pause, Play, Repeat, Repeat1, Shuffle, SkipBack, SkipForward, Volume2 } from 'lucide-react'
 
 import { usePlayer } from '@/contexts/PlayerContext'
 import { FavoriteButton } from '@/components/favorites/FavoriteButton'
@@ -23,14 +12,9 @@ export function PlayerBar() {
     usePlayer()
   const { currentTrack, isPlaying, durationMs, volume, shuffle, repeatMode } = state
 
-  // Cosmetic progress interpolation: the SDK only pushes a new position about once a
-  // second, so we tick locally between pushes and reset whenever the authoritative
-  // value (or the track) changes. `dragMs` holds the value while the user scrubs.
   const [displayMs, setDisplayMs] = useState(state.progressMs)
   const [dragMs, setDragMs] = useState<number | null>(null)
 
-  // Render-phase sync to the SDK's authoritative position (see react.dev,
-  // "You Might Not Need an Effect" — storing info from previous renders).
   const [synced, setSynced] = useState({ progressMs: state.progressMs, trackId: currentTrack?.id })
   if (synced.progressMs !== state.progressMs || synced.trackId !== currentTrack?.id) {
     setSynced({ progressMs: state.progressMs, trackId: currentTrack?.id })
@@ -190,20 +174,6 @@ export function PlayerBar() {
         </div>
 
         <div className="flex items-center justify-end gap-3 text-white/60">
-          <button
-            type="button"
-            aria-label={t('player.lyrics')}
-            className="transition-colors hover:text-white"
-          >
-            <Mic2 className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            aria-label={t('player.queue')}
-            className="transition-colors hover:text-white"
-          >
-            <ListMusic className="h-4 w-4" />
-          </button>
           <div className="flex items-center gap-2">
             <Volume2 className="h-4 w-4" />
             <input

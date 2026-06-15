@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_SPOTIFY_AUTH_URL: string
   readonly VITE_HOST: string
   readonly VITE_PORT: string
+  readonly VITE_USE_SPOTIFY_MOCK: string
 }
 
 interface ImportMeta {

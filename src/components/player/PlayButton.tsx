@@ -5,18 +5,12 @@ import { usePlayer, type PlayTrackInput } from '@/contexts/PlayerContext'
 import { cn } from '@/lib/utils'
 
 interface PlayButtonProps {
-  /** Spotify track id, used to detect whether this row is the active track. */
   trackId: string
-  /** What to start when this row isn't already playing. */
   playInput: PlayTrackInput
   className?: string
   iconClassName?: string
 }
 
-/**
- * Shared play/pause affordance for track rows. Starts `playInput` when its track
- * isn't the current one; otherwise toggles play/pause on the active track.
- */
 export function PlayButton({ trackId, playInput, className, iconClassName }: PlayButtonProps) {
   const { t } = useTranslation()
   const { state, playTrack, togglePlay } = usePlayer()

@@ -273,20 +273,28 @@ Ticket: [phase-8-insights.md](./tickets/phase-8-insights.md) · **Status: done**
 
 ---
 
-## ⏳ Phase 9 — Quality, Tests & Polish
+## ⏳ Phase 9 — Quality & Tests
 
-Ticket: [phase-9-quality.md](./tickets/phase-9-quality.md) · **Status: pending**
+Ticket: [phase-9-quality.md](./tickets/phase-9-quality.md) (**rewritten 2026-06-15** — old
+one was obsolete) · **Status: in progress (Fase A done; B–E handed off to another agent)**
 
-- [ ] Unit: `FavoritesContext.test.tsx`
-- [ ] Unit: `storage.test.ts`
-- [ ] Unit: `useArtistDiscovery.test.ts`
-- [ ] Unit: `AddFavoriteForm.test.tsx`
-- [ ] E2E: `login.spec.ts`
-- [ ] E2E: `artist-search.spec.ts`
-- [ ] E2E: `favorites.spec.ts`
-- [ ] Final visual polish (CTA gradients, glass cards, blobs, responsive 375/768/1280)
-- [ ] Loading spinner component (`Spinner.tsx`)
-- [ ] README updated (description, setup, architecture, scripts)
+**Fase A — Infra (done & verified, `bun run test` green, 14 tests):**
+- [x] Env-driven mock toggle (`VITE_USE_SPOTIFY_MOCK`) in `api.ts` + Playwright `webServer.env`
+- [x] Test helpers `src/test/utils.tsx` (`renderWithProviders` / `renderHookWithProviders`)
+- [x] Coverage config (v8, 80% thresholds on `contexts/**` + `**/hooks/**`) + `test:coverage` script
+- [x] Unit: `storage.test.ts` (7) · `FavoritesContext.test.tsx` (7)
+
+**Remaining (see ticket for full detail):**
+- [ ] Fase B: `AppContext.test.tsx`, `PlayerContext.test.tsx`
+- [ ] Fase C: hook tests (use-local-storage, use-media-query, useInfiniteScroll, useInsightsData,
+      useRecentPlays, useLibraryStats, useTopCharts, useSearchResults, useHomeData,
+      useArtistProfile, usePlaylist, useSpotifyLogin) → hit 80%
+- [ ] Fase D: `search.test.ts`, `type.test.ts` (slim-artist regression), `AddFavoriteDialog.test.tsx`
+- [ ] Fase E: E2E `login` / `home` / `search` / `favorites` (mock mode)
+
+**Decisions:** E2E via env-driven mocks (not real API); coverage target ≥80% on contexts+hooks.
+
+**Deferred (NOT in this ticket):** final visual polish, `Spinner.tsx`, README update.
 
 ---
 
