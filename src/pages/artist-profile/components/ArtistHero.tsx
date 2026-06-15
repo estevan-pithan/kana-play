@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BadgeCheck, Play } from 'lucide-react'
+import { BadgeCheck } from 'lucide-react'
 
 import type { SpotifyArtist } from '@/api/services/spotify/type'
 
@@ -29,11 +29,12 @@ export function ArtistHero({ artist, backButton }: ArtistHeroProps) {
       </div>
 
       <div className="relative z-10 flex w-full flex-col px-7 pt-4">
-        {backButton}
-        <div className="glass-card relative mt-4 flex w-full flex-col items-center justify-center overflow-hidden rounded-t-3xl border-b-0 p-8 text-center md:p-12">
+        <div className="glass-card relative mt-4 flex w-full flex-col items-start justify-center overflow-hidden rounded-t-3xl border-b-0 p-8 text-left md:p-12">
           <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
 
-          <div className="relative z-10 flex flex-col items-center">
+          <div className="relative z-10 flex w-full flex-col items-start">
+            {backButton && <div className="mb-6">{backButton}</div>}
+
             {/* Verified badge */}
             <div
               className="mb-4 inline-flex w-max items-center gap-2 rounded-full px-3 py-1"
@@ -53,17 +54,6 @@ export function ArtistHero({ artist, backButton }: ArtistHeroProps) {
             <h1 className="mb-5 bg-linear-to-r from-brand-light via-brand to-brand-light bg-clip-text text-5xl font-bold tracking-tight text-transparent drop-shadow-2xl md:text-7xl">
               {artist.name}
             </h1>
-
-            {/* Actions */}
-            <div className="mt-2 flex items-center gap-4">
-              <button
-                type="button"
-                aria-label={t('common.playNow')}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-r from-brand to-brand-light text-bg-deep shadow-[0_0_30px_rgba(204,119,34,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(212,175,55,0.6)]"
-              >
-                <Play className="ml-0.5 h-5 w-5 fill-current" />
-              </button>
-            </div>
           </div>
         </div>
       </div>

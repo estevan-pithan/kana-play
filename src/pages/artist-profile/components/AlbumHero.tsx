@@ -1,6 +1,5 @@
 import { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Play } from 'lucide-react'
 
 import type { SpotifyAlbum } from '@/api/services/spotify/type'
 import { formatReleaseDate } from '../utils'
@@ -10,7 +9,6 @@ interface AlbumHeroProps {
   backButton?: ReactNode
 }
 
-/** Full-bleed hero for a single album — its cover fills the background. */
 export function AlbumHero({ album, backButton }: AlbumHeroProps) {
   const { t } = useTranslation()
   const cover = album.images[0]?.url
@@ -32,50 +30,45 @@ export function AlbumHero({ album, backButton }: AlbumHeroProps) {
       </div>
 
       <div className="relative z-10 flex w-full flex-col px-7 pt-4">
-        {backButton}
-        <div className="glass-card relative mt-4 flex w-full flex-col items-center justify-center overflow-hidden rounded-t-3xl border-b-0 p-8 text-center md:p-12">
+        <div className="glass-card relative mt-4 flex w-full flex-col items-start justify-center overflow-hidden rounded-t-3xl border-b-0 p-8 text-left md:p-12">
           <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
 
-          <div className="relative z-10 flex flex-col items-center">
-            {/* Cover thumbnail */}
-            <div className="mb-6 h-36 w-36 overflow-hidden rounded-xl border border-white/10 bg-white/10 shadow-2xl md:h-44 md:w-44">
-              {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
-            </div>
+          <div className="relative z-10 flex w-full flex-col items-start">
+            {backButton && <div className="mb-6">{backButton}</div>}
 
-            {/* Album type badge */}
-            <div
-              className="mb-4 inline-flex w-max items-center gap-2 rounded-full px-3 py-1"
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid var(--brand-border)',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-              }}
-            >
-              <span className="text-xs font-semibold uppercase tracking-wider text-white/90">
-                {album.album_type}
-              </span>
-            </div>
+            <div className="flex w-full flex-col gap-6 md:flex-row md:items-start md:gap-8">
+              {/* Cover thumbnail */}
+              <div className="h-36 w-36 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/10 shadow-2xl md:h-44 md:w-44">
+                {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
+              </div>
 
-            <h1 className="mb-4 bg-linear-to-r from-brand-light via-brand to-brand-light bg-clip-text text-4xl font-bold tracking-tight text-transparent drop-shadow-2xl md:text-6xl">
-              {album.name}
-            </h1>
+              {/* Text in front of the cover */}
+              <div className="flex flex-col items-start">
+                {/* Album type badge */}
+                <div
+                  className="mb-4 inline-flex w-max items-center gap-2 rounded-full px-3 py-1"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid var(--brand-border)',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <span className="text-xs font-semibold uppercase tracking-wider text-white/90">
+                    {album.album_type}
+                  </span>
+                </div>
 
-            <p className="mb-1 text-lg font-semibold text-white">{artistNames}</p>
-            <p className="mb-6 text-sm text-white/50">
-              {formatReleaseDate(album.release_date)} ·{' '}
-              {t('artistDiscovery.trackCount', { count: album.total_tracks })}
-            </p>
+                <h1 className="mb-4 bg-linear-to-r from-brand-light via-brand to-brand-light bg-clip-text text-4xl font-bold tracking-tight text-transparent drop-shadow-2xl md:text-6xl">
+                  {album.name}
+                </h1>
 
-            {/* Actions */}
-            <div className="mt-2 flex items-center gap-4">
-              <button
-                type="button"
-                aria-label={t('common.playNow')}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-r from-brand to-brand-light text-bg-deep shadow-[0_0_30px_rgba(204,119,34,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(212,175,55,0.6)]"
-              >
-                <Play className="ml-0.5 h-5 w-5 fill-current" />
-              </button>
+                <p className="mb-1 text-lg font-semibold text-white">{artistNames}</p>
+                <p className="mb-6 text-sm text-white/50">
+                  {formatReleaseDate(album.release_date)} ·{' '}
+                  {t('artistDiscovery.trackCount', { count: album.total_tracks })}
+                </p>
+              </div>
             </div>
           </div>
         </div>
