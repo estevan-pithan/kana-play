@@ -10,6 +10,7 @@ import { BrowseGrid } from './components/BrowseGrid'
 import { PlaylistCard } from './components/PlaylistCard'
 import { ArtistCard } from './components/ArtistCard'
 import { TrackRow } from './components/TrackRow'
+import { TopTracksCard } from './components/TopTracksCard'
 import { AlbumCard } from './components/AlbumCard'
 import {
   SEARCH_TYPES,
@@ -115,76 +116,70 @@ function CarouselHome() {
     <div className="space-y-8">
       <FilterChips />
 
-      <SectionRow
-        title={t('artistDiscovery.topPlaylists')}
-        isLoading={playlists.isLoading}
-        isError={playlists.isError}
-        isEmpty={playlists.items.length === 0}
-        isFetchingMore={playlists.isFetchingNextPage}
-        onReachEnd={playlists.loadMore}
-        skeletonShape="square"
-      >
-        {playlists.items.map((playlist) => (
-          <PlaylistCard key={playlist.id} playlist={playlist} />
-        ))}
-      </SectionRow>
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="min-w-0 space-y-8">
+          <SectionRow
+            title={t('artistDiscovery.topPlaylists')}
+            isLoading={playlists.isLoading}
+            isError={playlists.isError}
+            isEmpty={playlists.items.length === 0}
+            isFetchingMore={playlists.isFetchingNextPage}
+            onReachEnd={playlists.loadMore}
+            skeletonShape="square"
+          >
+            {playlists.items.map((playlist) => (
+              <PlaylistCard key={playlist.id} playlist={playlist} />
+            ))}
+          </SectionRow>
 
-      <SectionRow
-        title={t('artistDiscovery.topArtists')}
-        isLoading={topArtists.isLoading}
-        isError={topArtists.isError}
-        isEmpty={topArtists.items.length === 0}
-        isFetchingMore={topArtists.isFetchingNextPage}
-        onReachEnd={topArtists.loadMore}
-        skeletonShape="circle"
-      >
-        {topArtists.items.map((artist) => (
-          <ArtistCard key={artist.id} artist={artist} />
-        ))}
-      </SectionRow>
+          <SectionRow
+            title={t('artistDiscovery.topArtists')}
+            isLoading={topArtists.isLoading}
+            isError={topArtists.isError}
+            isEmpty={topArtists.items.length === 0}
+            isFetchingMore={topArtists.isFetchingNextPage}
+            onReachEnd={topArtists.loadMore}
+            skeletonShape="circle"
+          >
+            {topArtists.items.map((artist) => (
+              <ArtistCard key={artist.id} artist={artist} />
+            ))}
+          </SectionRow>
 
-      <SectionRow
-        title={t('artistDiscovery.topTracks')}
-        isLoading={topTracks.isLoading}
-        isError={topTracks.isError}
-        isEmpty={topTracks.items.length === 0}
-        isFetchingMore={topTracks.isFetchingNextPage}
-        onReachEnd={topTracks.loadMore}
-        skeletonShape="row"
-        skeletonCount={4}
-      >
-        {topTracks.items.map((track) => (
-          <TrackRow key={track.id} track={track} />
-        ))}
-      </SectionRow>
+          <SectionRow
+            title={t('artistDiscovery.followedArtists')}
+            isLoading={followedArtists.isLoading}
+            isError={followedArtists.isError}
+            isEmpty={followedArtists.items.length === 0}
+            isFetchingMore={followedArtists.isFetchingNextPage}
+            onReachEnd={followedArtists.loadMore}
+            skeletonShape="circle"
+          >
+            {followedArtists.items.map((artist) => (
+              <ArtistCard key={`followed-${artist.id}`} artist={artist} />
+            ))}
+          </SectionRow>
 
-      <SectionRow
-        title={t('artistDiscovery.followedArtists')}
-        isLoading={followedArtists.isLoading}
-        isError={followedArtists.isError}
-        isEmpty={followedArtists.items.length === 0}
-        isFetchingMore={followedArtists.isFetchingNextPage}
-        onReachEnd={followedArtists.loadMore}
-        skeletonShape="circle"
-      >
-        {followedArtists.items.map((artist) => (
-          <ArtistCard key={`followed-${artist.id}`} artist={artist} />
-        ))}
-      </SectionRow>
+          <SectionRow
+            title={t('artistDiscovery.savedAlbums')}
+            isLoading={savedAlbums.isLoading}
+            isError={savedAlbums.isError}
+            isEmpty={savedAlbums.items.length === 0}
+            isFetchingMore={savedAlbums.isFetchingNextPage}
+            onReachEnd={savedAlbums.loadMore}
+            skeletonShape="square"
+          >
+            {savedAlbums.items.map((album) => (
+              <AlbumCard key={album.id} album={album} />
+            ))}
+          </SectionRow>
+        </div>
 
-      <SectionRow
-        title={t('artistDiscovery.savedAlbums')}
-        isLoading={savedAlbums.isLoading}
-        isError={savedAlbums.isError}
-        isEmpty={savedAlbums.items.length === 0}
-        isFetchingMore={savedAlbums.isFetchingNextPage}
-        onReachEnd={savedAlbums.loadMore}
-        skeletonShape="square"
-      >
-        {savedAlbums.items.map((album) => (
-          <AlbumCard key={album.id} album={album} />
-        ))}
-      </SectionRow>
+        <TopTracksCard
+          title={t('artistDiscovery.topTracks')}
+          section={topTracks}
+        />
+      </div>
     </div>
   )
 }

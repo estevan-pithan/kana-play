@@ -13,18 +13,30 @@ function formatDuration(ms: number) {
 interface TrackRowProps {
   track: SpotifyTrack
   onAdd?: (track: SpotifyTrack) => void
+  /** `carousel` keeps the fixed-width snap behaviour; `list` fills its column. */
+  variant?: 'carousel' | 'list'
+  /** 1-based position shown as a leading rank in `list` variant. */
+  rank?: number
 }
 
-export function TrackRow({ track, onAdd }: TrackRowProps) {
+export function TrackRow({ track, onAdd, variant = 'carousel', rank }: TrackRowProps) {
   const { t } = useTranslation()
   const cover = track.album.images[0]?.url
   const artistNames = track.artists.map((a) => a.name).join(', ')
+  const isList = variant === 'list'
 
   return (
     <div
-      className="flex w-[320px] shrink-0 items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/[0.04]"
-      style={{ scrollSnapAlign: 'start' }}
+      className={`flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/[0.04] ${
+        isList ? 'w-full' : 'w-[320px] shrink-0'
+      }`}
+      style={isList ? undefined : { scrollSnapAlign: 'start' }}
     >
+      {isList && rank != null && (
+        <span className="w-5 shrink-0 text-center text-xs font-semibold text-white/40">
+          {rank}
+        </span>
+      )}
       <div className="h-12 w-12 shrink-0 overflow-hidden rounded-md bg-white/10">
         {cover && (
           <img

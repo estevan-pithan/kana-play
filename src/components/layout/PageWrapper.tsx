@@ -8,6 +8,6 @@ interface PageWrapperProps {
 
 export function PageWrapper({ children, className }: PageWrapperProps) {
   return (
-    <div className={cn('mx-auto w-full max-w-[1280px] px-8 py-9', className)}>{children}</div>
+    <div className={cn('w-full px-7 py-9', className)}>{children}</div>
   )
 }
