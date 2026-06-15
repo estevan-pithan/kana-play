@@ -1,6 +1,6 @@
 # KanaPlay — Implementation Progress
 
-Tracker for the 9 phases defined in [`tickets/`](./tickets/). Update the boxes as work
+Tracker for the phases defined in [`tickets/`](./tickets/). Update the boxes as work
 lands. Each phase links to its ticket; tasks below mirror the ticket's "Tasks" section.
 
 **Legend:** `[ ]` pending · `[~]` in progress · `[x]` done · `[-]` skipped/deferred
@@ -287,3 +287,93 @@ Ticket: [phase-9-quality.md](./tickets/phase-9-quality.md) · **Status: pending*
 - [ ] Final visual polish (CTA gradients, glass cards, blobs, responsive 375/768/1280)
 - [ ] Loading spinner component (`Spinner.tsx`)
 - [ ] README updated (description, setup, architecture, scripts)
+
+---
+
+## ✅ Phase 10 — Music Playback Foundation (Web Playback SDK + Player API)
+
+Ticket: [phase-10-playback-foundation.md](./tickets/phase-10-playback-foundation.md) · **Status: done**
+
+- [x] Add `streaming` scope to `spotify-pkce.ts` (existing users must re-login once)
+- [x] Player-control services in `player/`: `get-playback-state`, `transfer-playback`, `start-playback`, `pause-playback`, `skip-to-next`, `skip-to-previous`, `seek-to-position`, `set-volume`, `set-repeat-mode`, `set-shuffle`
+- [x] `get-playback-state.mock.ts` with `successMock` / `emptyMock` (the `204` case) / `errorMock`
+- [x] `spotify-player-sdk.ts` loader (idempotent script inject + `onSpotifyWebPlaybackSDKReady`)
+- [x] `Spotify.Player` typings in `vite-env.d.ts`
+- [x] `PlayerContext` (useReducer): SDK init, `ready`/`not_ready`/`player_state_changed`/error listeners, `transferPlayback` to our device
+- [x] Actions: `playTrack`, `togglePlay`, `next`, `previous`, `seek`, `setVolume`, `toggleShuffle`, `cycleRepeat`
+- [x] `usePlayer` hook + `PlayerProvider` wired into `Providers.tsx`
+- [x] Graceful `premium_required` state on free accounts (no crash)
+
+**Decision:** Playback strategy = **Web Playback SDK + REST `/me/player/*` control endpoints**
+(chosen by user 2026-06-15). SDK creates an in-browser device that streams full tracks; the
+doc.yaml control endpoints drive it. Requires **Spotify Premium** + the `streaming` scope.
+Rejected alternatives: 30s `preview_url` (doesn't use the player endpoints, often `null` for new apps);
+controlling an existing external device only (no in-browser audio).
+
+**Notes**
+- **Mocks only for the one endpoint with a body.** The 9 control endpoints all return
+  `204 No Content` → `void`, so there is nothing to fabricate: each short-circuits inline with
+  `if (USE_SPOTIFY_MOCK) return`. Only `get-playback-state` (which has a response) ships a
+  `.mock.ts` (`success`/`empty`/`error`) — deviates from the ticket's "sibling mock for each"
+  to avoid 9 empty no-op files.
+- **SDK methods vs REST.** `togglePlay`/`next`/`previous`/`seek`/`setVolume` use the SDK
+  player object directly (snappier, local to the browser device); `playTrack` (specific
+  uris/context), `toggleShuffle` and `cycleRepeat` go through the REST services because the
+  SDK player exposes no shuffle/repeat/queue-jump methods. Shuffle/repeat/volume/seek update
+  local state **optimistically**; the authoritative value still arrives via
+  `player_state_changed`.
+- **Volume** is held 0–100 in state but the SDK's `setVolume` takes 0–1 (converted on the way
+  out). No `/me/player/volume` REST call is used for the browser device — the SDK handles it.
+- **Provider placement:** `PlayerProvider` wraps `RouterProvider` inside `FavoritesProvider`
+  in `Providers.tsx` (it reads the token from `AppContext`). It only boots the SDK when a
+  token exists and tears the player down (`disconnect()` + `RESET`) on logout. `usePlayer` is
+  therefore available app-wide; the global `PlayerBar` (in `ProtectedLayout`) consumes it in
+  Phase 11.
+- **No audible sound without Premium + a live token.** With `USE_SPOTIFY_MOCK = true` the
+  services resolve and `get-playback-state` returns a fake "now playing", but the SDK needs a
+  real Premium token to emit audio — same honesty bar as Phase 8 ("no simulation").
+- `getOAuthToken` reads the latest token from a ref, so token refreshes don't recreate the
+  player. SDK only runs in a secure context (`https` / `http://localhost`) — same constraint
+  as the PKCE redirect.
+- **Re-login required once:** tokens issued before this phase lack the `streaming` scope; the
+  SDK will emit `authentication_error` until the user logs in again.
+
+---
+
+## ✅ Phase 11 — Functional PlayerBar & Play Triggers
+
+Ticket: [phase-11-player-ui.md](./tickets/phase-11-player-ui.md) · **Status: done**
+
+- [x] Rewire `PlayerBar.tsx` to `usePlayer()` — removed `MOCK_TRACK` + local playback state
+- [x] Transport bound to context (play/pause, next, prev, shuffle, repeat); progress + volume sliders → `seek`/`setVolume`
+- [x] Cosmetic progress-tick interpolation between SDK state pushes (no polling)
+- [x] Idle ("nothing playing") + `premium_required`/`connecting` disabled states
+- [x] Like button reuses `FavoriteButton` (wired to `FavoritesContext`, not local state)
+- [x] Play triggers on `TrackRow.tsx` (track uris) and `TrackItem.tsx`/`AlbumTracksView.tsx` (album context + offset)
+- [x] Shared `PlayButton` component (`src/components/player/`); current-row "playing" indicator
+- [x] i18n `player.*` keys (en-US + pt-BR); transport aria-labels moved to `t()`
+
+**Notes**
+- **Like button reuses the existing `FavoriteButton`** rather than a bespoke toggle — it
+  already wires to `FavoritesContext` (open-dialog on add, remove on click) and matches the
+  track lists. Favorites are matched by `trackName` + `artist`, so the bar's heart stays in
+  sync with the same track's heart in the lists.
+- **Progress interpolation is render-phase, not effect-based.** Mirroring the SDK's
+  `progressMs` into local state via `useEffect` tripped `react-hooks/set-state-in-effect`;
+  switched to the React "store info from previous renders" pattern (compare + setState during
+  render). A 1s `setInterval` advances the bar between the SDK's ~1/s `player_state_changed`
+  pushes; scrubbing suspends the tick and commits on `pointerup` via `seek()`.
+- **`controlsDisabled = !isReady`** covers both connecting and premium-blocked (account_error
+  also clears `isReady`); the hint text distinguishes them (`connecting` vs `premiumRequired`).
+- **Repeat** uses `Repeat1` (lucide) for the `track` mode and `Repeat` for `off`/`context`,
+  brand-tinted when not `off` — Spotify-style.
+- **`TrackRow` / `TrackItem` now subscribe to `usePlayer`** to render the current-track
+  highlight + playing indicator. This means visible track rows re-render on the SDK's ~1/s
+  state push during playback — acceptable for the list sizes here; revisit with a selector/
+  context split if lists grow large.
+- **`PlayButton`** (`src/components/player/PlayButton.tsx`) is the shared affordance: plays
+  its `playInput` when its track isn't current, else `togglePlay`; disabled + titled when
+  `premium_required`. Home rows play a single track URI; album rows play the album context
+  with a track `offset` so next/prev walk the album.
+- Same Premium/mock caveat as Phase 10: with `USE_SPOTIFY_MOCK = true` the bar can show a
+  fabricated "now playing" but no audio plays without a live Premium token.
