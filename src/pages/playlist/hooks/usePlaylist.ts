@@ -24,8 +24,7 @@ export function usePlaylistTracks(id: string | undefined) {
   const query = useInfiniteQuery({
     queryKey: ['playlist-items', id],
     queryFn: id
-      ? ({ pageParam }) =>
-          getPlaylistItems({ id, limit: PAGE_SIZE, offset: pageParam })
+      ? ({ pageParam }) => getPlaylistItems({ id, limit: PAGE_SIZE, offset: pageParam })
       : skipToken,
     initialPageParam: 0,
     getNextPageParam: (last) => (last.next ? last.offset + last.limit : undefined),

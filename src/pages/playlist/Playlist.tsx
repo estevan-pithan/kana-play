@@ -87,9 +87,7 @@ export default function Playlist() {
           <div className="glass-card flex flex-col items-center p-8 text-center">
             {tracksForbidden && <Lock className="mb-3 h-7 w-7 text-white/60" />}
             <p className="text-sm font-semibold text-white">
-              {tracksForbidden
-                ? t('playlist.forbiddenTitle')
-                : t('artistDiscovery.errorTitle')}
+              {tracksForbidden ? t('playlist.forbiddenTitle') : t('artistDiscovery.errorTitle')}
             </p>
             <p className="mt-2 text-sm text-white/60">
               {tracksForbidden ? t('playlist.forbiddenBody') : t('common.error')}
@@ -105,11 +103,7 @@ export default function Playlist() {
           <>
             <div className="flex flex-col gap-2">
               {tracks.tracks.map((row, i) => (
-                <PlaylistTrackItem
-                  key={`${row.track.id}-${i}`}
-                  index={i}
-                  track={row.track}
-                />
+                <PlaylistTrackItem key={`${row.track.id}-${i}`} index={i} track={row.track} />
               ))}
             </div>
 
@@ -121,9 +115,7 @@ export default function Playlist() {
                   disabled={tracks.isFetchingNextPage}
                   className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 disabled:opacity-50"
                 >
-                  {tracks.isFetchingNextPage
-                    ? t('common.loading')
-                    : t('artistDiscovery.loadMore')}
+                  {tracks.isFetchingNextPage ? t('common.loading') : t('artistDiscovery.loadMore')}
                 </button>
               </div>
             )}

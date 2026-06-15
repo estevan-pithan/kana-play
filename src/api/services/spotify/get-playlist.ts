@@ -23,10 +23,7 @@ export const playlistSchema = z.object({
     id: z.string(),
     display_name: z.string().nullable().default(null),
   }),
-  tracks: z
-    .object({ total: z.number() })
-    .optional()
-    .default({ total: 0 }),
+  tracks: z.object({ total: z.number() }).optional().default({ total: 0 }),
   external_urls: z.object({ spotify: z.string() }),
 })
 
