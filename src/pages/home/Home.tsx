@@ -20,7 +20,7 @@ function isSearchType(value: string | null): value is SearchType {
   return value !== null && (SEARCH_TYPES as readonly string[]).includes(value)
 }
 
-export default function ArtistDiscovery() {
+export default function Home() {
   const [searchParams] = useSearchParams()
   const query = (searchParams.get('q') ?? '').trim()
   const rawType = searchParams.get('type')
@@ -44,7 +44,6 @@ function HomeMode({ type }: { type: SearchType }) {
   return <BrowseHome type={type} />
 }
 
-/** Single-type screens: a full-width grid/list with vertical infinite scroll. */
 function BrowseHome({ type }: { type: Exclude<SearchType, 'all'> }) {
   const { t } = useTranslation()
   const { playlists, topArtists, topTracks, followedArtists, savedAlbums } =
@@ -107,7 +106,6 @@ function BrowseHome({ type }: { type: Exclude<SearchType, 'all'> }) {
   )
 }
 
-/** Default landing: one horizontal carousel per category. */
 function CarouselHome() {
   const { t } = useTranslation()
   const { playlists, topArtists, topTracks, followedArtists, savedAlbums } =
@@ -214,7 +212,7 @@ function SearchMode({ query, type }: { query: string; type: SearchType }) {
           {Array.from({ length: 10 }).map((_, i) => (
             <div
               key={i}
-              className="aspect-square animate-pulse rounded-xl bg-white/[0.05]"
+              className="aspect-square animate-pulse rounded-xl bg-white/5"
             />
           ))}
         </div>
