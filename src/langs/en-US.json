@@ -58,8 +58,8 @@
     "tracks": "Tracks",
     "followedArtists": "Followed Artists",
     "savedAlbums": "Saved Albums",
-    "trackCount": "{{count}} track",
-    "trackCount_plural": "{{count}} tracks",
+    "trackCount_one": "{{count}} track",
+    "trackCount_other": "{{count}} tracks",
     "addToQueue": "Add to queue",
     "searchPlaceholder": "Search artists…",
     "albumFilterPlaceholder": "Filter by album",
@@ -97,11 +97,26 @@
     "selectAlbumTitle": "Select an album",
     "selectAlbumHint": "Pick an album on the left to see its tracks here."
   },
+  "playlist": {
+    "badge": "Playlist",
+    "byOwner": "By {{name}}",
+    "forbiddenTitle": "You don't have access to this playlist",
+    "forbiddenBody": "Spotify only lets the owner or collaborators see private playlist contents."
+  },
+  "apiErrors": {
+    "badRequest": "Spotify rejected the request.",
+    "forbidden": "You don't have permission to access that on Spotify.",
+    "notFound": "We couldn't find that on Spotify.",
+    "rateLimited": "Spotify rate limit reached. Please try again shortly.",
+    "rateLimitedWithRetry": "Spotify rate limit reached. Try again in {{seconds}}s.",
+    "serverError": "Spotify is unavailable right now. Please try again later.",
+    "network": "Network error reaching Spotify."
+  },
   "collection": {
     "title": "Liked Songs",
     "subtitle": "Your saved tracks, in one place.",
-    "trackCount": "{{count}} Track",
-    "trackCount_plural": "{{count}} Tracks",
+    "trackCount_one": "{{count}} Track",
+    "trackCount_other": "{{count}} Tracks",
     "empty": "You haven't favorited anything yet.",
     "library": "Your Library",
     "likedSongs": "Liked Songs",

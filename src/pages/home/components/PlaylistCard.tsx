@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import type { SpotifyPlaylist } from '@/api/services/spotify/type'
@@ -11,10 +12,8 @@ export function PlaylistCard({ playlist }: PlaylistCardProps) {
   const cover = playlist.images[0]?.url
 
   return (
-    <a
-      href={playlist.external_urls.spotify}
-      target="_blank"
-      rel="noreferrer noopener"
+    <Link
+      to={`/playlist/${playlist.id}`}
       className="group block w-[160px] shrink-0 space-y-2"
       style={{ scrollSnapAlign: 'start' }}
     >
@@ -36,6 +35,6 @@ export function PlaylistCard({ playlist }: PlaylistCardProps) {
           })}
         </p>
       </div>
-    </a>
+    </Link>
   )
 }

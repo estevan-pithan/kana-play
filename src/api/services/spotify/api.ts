@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { toast } from 'sonner'
 
+import i18n from '@/langs/i18n'
+
 export const VITE_SPOTIFY_BASE_URL = import.meta.env.VITE_SPOTIFY_BASE_URL
 export const VITE_SPOTIFY_AUTH_URL = import.meta.env.VITE_SPOTIFY_AUTH_URL
 export const USE_SPOTIFY_MOCK = false
@@ -33,8 +35,7 @@ apiSpotify.interceptors.response.use(
   (error: unknown) => {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status
-      const data = error.response?.data as { error?: { message?: string } } | undefined
-      const message = data?.error?.message
+      const t = i18n.t.bind(i18n)
 
       if (status === 401) {
         onUnauthorized()
@@ -42,18 +43,20 @@ apiSpotify.interceptors.response.use(
         // Spotify hints at the cooldown via the `Retry-After` header (in seconds).
         const retryAfter = Number(error.response?.headers?.['retry-after'])
         toast.error(
-          message ??
-            (Number.isFinite(retryAfter) && retryAfter > 0
-              ? `Spotify rate limit reached. Try again in ${retryAfter}s.`
-              : 'Spotify rate limit reached. Please try again shortly.'),
+          Number.isFinite(retryAfter) && retryAfter > 0
+            ? t('apiErrors.rateLimitedWithRetry', { seconds: retryAfter })
+            : t('apiErrors.rateLimited'),
         )
-      } else if (status === 400 || status === 403 || status === 404) {
-        toast.error(message ?? 'Spotify request failed.')
+      } else if (status === 403) {
+        toast.error(t('apiErrors.forbidden'))
+      } else if (status === 404) {
+        toast.error(t('apiErrors.notFound'))
+      } else if (status === 400) {
+        toast.error(t('apiErrors.badRequest'))
       } else if (status !== undefined && status >= 500) {
-        toast.error(message ?? 'Spotify is unavailable right now. Please try again later.')
+        toast.error(t('apiErrors.serverError'))
       } else if (status === undefined) {
-        // No response (network/CORS): fall through with a generic notice.
-        toast.error('Network error reaching Spotify.')
+        toast.error(t('apiErrors.network'))
       }
     }
     return Promise.reject(error as Error)

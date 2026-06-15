@@ -1,16 +1,17 @@
-/**
- * Spotify Authorization Code + PKCE helpers.
- *
- * PKCE lets a public SPA client authenticate without a client secret: we generate a
- * random `code_verifier`, send its SHA-256 hash (`code_challenge`) to Spotify's authorize
- * endpoint, then prove possession of the verifier when exchanging the returned `code` for
- * a token. Verifier + state are stashed in `sessionStorage` across the redirect round-trip.
- */
-
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID
 const REDIRECT_URI = `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}/callback`
 const AUTHORIZE_URL = 'https://accounts.spotify.com/authorize'
-const SCOPES = ['user-read-email', 'user-read-private', 'user-top-read', 'user-library-read', "playlist-read-private", "playlist-read-collaborative", "playlist-modify-private", "playlist-modify-public", "user-follow-read"]
+const SCOPES = [
+  'user-read-email',
+  'user-read-private',
+  'user-top-read',
+  'user-library-read',
+  'playlist-read-private',
+  'playlist-read-collaborative',
+  'playlist-modify-private',
+  'playlist-modify-public',
+  'user-follow-read',
+]
 
 const VERIFIER_KEY = 'kanaplay_pkce_verifier'
 const STATE_KEY = 'kanaplay_pkce_state'

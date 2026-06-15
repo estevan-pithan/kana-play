@@ -5,6 +5,7 @@ import Login from '@/pages/login/Login'
 import Callback from '@/pages/callback/Callback'
 import Home from '@/pages/home/Home'
 import ArtistProfile from '@/pages/artist-profile/ArtistProfile'
+import Playlist from '@/pages/playlist/Playlist'
 import MyCollection from '@/pages/my-collection/MyCollection'
 import Insights from '@/pages/insights/Insights'
 
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <Home /> },
           { path: 'artist/:id', element: <ArtistProfile /> },
+          { path: 'playlist/:id', element: <Playlist /> },
           { path: 'collection', element: <MyCollection /> },
           { path: 'insights', element: <Insights /> },
         ],

@@ -58,8 +58,8 @@
     "tracks": "Faixas",
     "followedArtists": "Artistas que você segue",
     "savedAlbums": "Álbuns salvos",
-    "trackCount": "{{count}} faixa",
-    "trackCount_plural": "{{count}} faixas",
+    "trackCount_one": "{{count}} faixa",
+    "trackCount_other": "{{count}} faixas",
     "addToQueue": "Adicionar à fila",
     "searchPlaceholder": "Buscar artistas…",
     "albumFilterPlaceholder": "Filtrar por álbum",
@@ -97,11 +97,26 @@
     "selectAlbumTitle": "Selecione um álbum",
     "selectAlbumHint": "Escolha um álbum à esquerda para ver as músicas aqui."
   },
+  "playlist": {
+    "badge": "Playlist",
+    "byOwner": "Por {{name}}",
+    "forbiddenTitle": "Você não tem acesso a esta playlist",
+    "forbiddenBody": "O Spotify só permite que o dono ou colaboradores vejam o conteúdo de playlists privadas."
+  },
+  "apiErrors": {
+    "badRequest": "O Spotify rejeitou a requisição.",
+    "forbidden": "Você não tem permissão para acessar isso no Spotify.",
+    "notFound": "Não encontramos isso no Spotify.",
+    "rateLimited": "Limite de requisições do Spotify atingido. Tente novamente em instantes.",
+    "rateLimitedWithRetry": "Limite de requisições do Spotify atingido. Tente novamente em {{seconds}}s.",
+    "serverError": "O Spotify está indisponível agora. Tente novamente mais tarde.",
+    "network": "Erro de rede ao acessar o Spotify."
+  },
   "collection": {
     "title": "Músicas curtidas",
     "subtitle": "Suas faixas salvas em um só lugar.",
-    "trackCount": "{{count}} faixa",
-    "trackCount_plural": "{{count}} faixas",
+    "trackCount_one": "{{count}} faixa",
+    "trackCount_other": "{{count}} faixas",
     "empty": "Você ainda não favoritou nada.",
     "library": "Sua biblioteca",
     "likedSongs": "Curtidas",
