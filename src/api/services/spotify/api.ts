@@ -40,7 +40,6 @@ apiSpotify.interceptors.response.use(
       if (status === 401) {
         onUnauthorized()
       } else if (status === 429) {
-        // Spotify hints at the cooldown via the `Retry-After` header (in seconds).
         const retryAfter = Number(error.response?.headers?.['retry-after'])
         toast.error(
           Number.isFinite(retryAfter) && retryAfter > 0
