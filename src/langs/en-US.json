@@ -7,6 +7,9 @@
     "cancel": "Cancel",
     "remove": "Remove",
     "confirm": "Confirm",
+    "back": "Back",
+    "previous": "Previous",
+    "next": "Next",
     "search": "Search",
     "playNow": "Play Now",
     "follow": "Follow",
@@ -52,6 +55,7 @@
     "topPlaylists": "Top Playlists",
     "topArtists": "Top Artists",
     "topTracks": "Top Tracks",
+    "tracks": "Tracks",
     "followedArtists": "Followed Artists",
     "savedAlbums": "Saved Albums",
     "trackCount": "{{count}} track",
@@ -77,6 +81,9 @@
     "readFullBio": "Read Full Bio",
     "fansAlsoLike": "Fans Also Like",
     "seeMore": "See More",
+    "following": "Following",
+    "backToAlbums": "Back to albums",
+    "pageOf": "Page {{page}} of {{total}}",
     "addFavorite": "Add to favorites",
     "playCount": "Plays",
     "duration": "Duration",
@@ -85,7 +92,10 @@
     "tableType": "Type",
     "tableReleaseDate": "Release Date",
     "tableTracks": "Tracks",
-    "tableActions": "Actions"
+    "tableActions": "Actions",
+    "tracks": "Tracks",
+    "selectAlbumTitle": "Select an album",
+    "selectAlbumHint": "Pick an album on the left to see its tracks here."
   },
   "collection": {
     "title": "Liked Songs",
@@ -109,7 +119,8 @@
       "submit": "Add to collection",
       "submitting": "Saving…",
       "successToast": "Added to your collection.",
-      "removed": "Removed from collection."
+      "removed": "Removed from collection.",
+      "errorRequired": "This field is required."
     }
   },
   "insights": {

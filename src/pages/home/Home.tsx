@@ -113,11 +113,11 @@ function CarouselHome() {
     useHomeData()
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8 xl:h-[calc(100vh-16.5rem)] xl:overflow-hidden">
       <FilterChips />
 
-      <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="min-w-0 space-y-8">
+      <div className="grid grid-cols-1 gap-8 xl:min-h-0 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="hide-scrollbar min-w-0 space-y-8 xl:overflow-y-auto xl:pr-2">
           <SectionRow
             title={t('artistDiscovery.topPlaylists')}
             isLoading={playlists.isLoading}
@@ -176,7 +176,7 @@ function CarouselHome() {
         </div>
 
         <TopTracksCard
-          title={t('artistDiscovery.topTracks')}
+          title={t('artistDiscovery.tracks')}
           section={topTracks}
         />
       </div>

@@ -17,7 +17,7 @@ export function Navbar() {
         borderColor: 'rgba(255, 255, 255, 0.09)',
       }}
     >
-      <div className="px-7 grid h-20 w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-6">
+      <div className="px-7 flex h-20 w-full   items-center justify-between gap-6">
         <div className="flex items-center gap-3">
           <NavLink to="/" className="flex items-center">
             <img src={logo} alt="" className="h-14" />
@@ -27,7 +27,7 @@ export function Navbar() {
           </NavLink>
         </div>
 
-        <div className="flex justify-center items-center gap-3">
+        <div className="flex justify-center items-center grow gap-3 ">
           <NavLink
             to="/"
             end

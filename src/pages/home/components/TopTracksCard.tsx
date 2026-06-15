@@ -32,7 +32,7 @@ export function TopTracksCard({ title, section }: TopTracksCardProps) {
   )
 
   return (
-    <section className="glass-card flex flex-col self-start p-5 xl:sticky xl:top-6 xl:max-h-[calc(100vh-8rem)]">
+    <section className="glass-card flex flex-col p-5 xl:h-full xl:min-h-0">
       <h2 className="mb-4 shrink-0 text-xl font-semibold text-white">{title}</h2>
 
       {isLoading && (
@@ -57,7 +57,7 @@ export function TopTracksCard({ title, section }: TopTracksCardProps) {
       {!isLoading && !isError && items.length > 0 && (
         <div
           onScroll={handleScroll}
-          className="hide-scrollbar -mx-2 flex flex-col gap-1 overflow-y-auto px-2"
+          className="hide-scrollbar -mx-2 flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-2"
         >
           {items.map((track, index) => (
             <TrackRow

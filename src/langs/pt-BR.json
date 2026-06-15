@@ -7,6 +7,9 @@
     "cancel": "Cancelar",
     "remove": "Remover",
     "confirm": "Confirmar",
+    "back": "Voltar",
+    "previous": "Anterior",
+    "next": "Próxima",
     "search": "Buscar",
     "playNow": "Tocar agora",
     "follow": "Seguir",
@@ -52,6 +55,7 @@
     "topPlaylists": "Suas playlists",
     "topArtists": "Seus artistas",
     "topTracks": "Suas faixas favoritas",
+    "tracks": "Faixas",
     "followedArtists": "Artistas que você segue",
     "savedAlbums": "Álbuns salvos",
     "trackCount": "{{count}} faixa",
@@ -77,6 +81,9 @@
     "readFullBio": "Ler biografia completa",
     "fansAlsoLike": "Fãs também curtem",
     "seeMore": "Ver mais",
+    "following": "Seguindo",
+    "backToAlbums": "Voltar para álbuns",
+    "pageOf": "Página {{page}} de {{total}}",
     "addFavorite": "Adicionar aos favoritos",
     "playCount": "Reproduções",
     "duration": "Duração",
@@ -85,7 +92,10 @@
     "tableType": "Tipo",
     "tableReleaseDate": "Lançamento",
     "tableTracks": "Faixas",
-    "tableActions": "Ações"
+    "tableActions": "Ações",
+    "tracks": "Músicas",
+    "selectAlbumTitle": "Selecione um álbum",
+    "selectAlbumHint": "Escolha um álbum à esquerda para ver as músicas aqui."
   },
   "collection": {
     "title": "Músicas curtidas",
@@ -109,7 +119,8 @@
       "submit": "Adicionar à coleção",
       "submitting": "Salvando…",
       "successToast": "Adicionado à sua coleção.",
-      "removed": "Removido da coleção."
+      "removed": "Removido da coleção.",
+      "errorRequired": "Este campo é obrigatório."
     }
   },
   "insights": {
