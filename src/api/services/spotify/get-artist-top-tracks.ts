@@ -1,23 +1,10 @@
 import { z } from 'zod'
 
 import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
-import { spotifyImageSchema, spotifySimplifiedArtistSchema } from './type'
+import { spotifyTrackSchema } from './type'
 import { getArtistTopTracksSuccessMock } from '@/api/mocks/spotify/get-artist-top-tracks.mock'
 
-const spotifyTrackSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  duration_ms: z.number(),
-  album: z.object({
-    id: z.string(),
-    name: z.string(),
-    images: z.array(spotifyImageSchema),
-  }),
-  artists: z.array(spotifySimplifiedArtistSchema),
-  preview_url: z.string().nullable(),
-})
-
-export type SpotifyTrack = z.infer<typeof spotifyTrackSchema>
+export type { SpotifyTrack } from './type'
 
 const getArtistTopTracksResponseSchema = z.object({
   tracks: z.array(spotifyTrackSchema),

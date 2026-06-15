@@ -5,7 +5,7 @@ export const exchangeCodeForTokenSuccessMock: ExchangeCodeForTokenResponse = {
   token_type: 'Bearer',
   expires_in: 3600,
   refresh_token: 'AQDk1I0g4l9yV3XrZwOnS8qM2tUgD7hL5iE9fB3cY',
-  scope: 'user-read-email user-read-private user-top-read user-library-read',
+  scope: 'user-read-email user-read-private user-top-read user-library-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public',
 }
 
 export const exchangeCodeForTokenEmptyMock: ExchangeCodeForTokenResponse = {

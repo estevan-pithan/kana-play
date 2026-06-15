@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
 import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
-import { spotifyImageSchema, spotifySimplifiedArtistSchema } from './type'
+import { spotifyAlbumSchema } from './type'
 import { getArtistAlbumsSuccessMock } from '@/api/mocks/spotify/get-artist-albums.mock'
+
+export type { SpotifyAlbum } from './type'
 
 export const getArtistAlbumsInputSchema = z.object({
   id: z.string(),
@@ -11,18 +13,6 @@ export const getArtistAlbumsInputSchema = z.object({
 })
 
 export type GetArtistAlbumsInput = z.infer<typeof getArtistAlbumsInputSchema>
-
-const spotifyAlbumSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  album_type: z.string(),
-  release_date: z.string(),
-  total_tracks: z.number(),
-  images: z.array(spotifyImageSchema),
-  artists: z.array(spotifySimplifiedArtistSchema),
-})
-
-export type SpotifyAlbum = z.infer<typeof spotifyAlbumSchema>
 
 const getArtistAlbumsResponseSchema = z.object({
   items: z.array(spotifyAlbumSchema),
