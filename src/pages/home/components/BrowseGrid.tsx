@@ -9,11 +9,14 @@ interface BrowseGridProps<T> {
   section: HomeSection<T>
   /** `grid` for cards, `list` for full-width rows (tracks). */
   layout?: 'grid' | 'list'
-  renderItem: (item: T) => ReactNode
+  renderItem: (item: T, index: number) => ReactNode
 }
 
 const GRID_CLASSES =
   'grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
+
+/** Full-width track rows flow into up to two columns so wide screens aren't wasted. */
+const LIST_CLASSES = 'grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2'
 
 export function BrowseGrid<T>({
   title,
@@ -35,13 +38,13 @@ export function BrowseGrid<T>({
       <h2 className="text-xl font-semibold text-white">{title}</h2>
 
       {isLoading && (
-        <div className={layout === 'list' ? 'flex flex-col gap-2' : GRID_CLASSES}>
-          {Array.from({ length: layout === 'list' ? 8 : 15 }).map((_, i) => (
+        <div className={layout === 'list' ? LIST_CLASSES : GRID_CLASSES}>
+          {Array.from({ length: layout === 'list' ? 10 : 15 }).map((_, i) => (
             <div
               key={i}
               className={
                 layout === 'list'
-                  ? 'h-14 animate-pulse rounded-xl bg-white/[0.05]'
+                  ? 'h-16 animate-pulse rounded-xl bg-white/[0.05]'
                   : 'aspect-square animate-pulse rounded-xl bg-white/[0.05]'
               }
             />
@@ -59,8 +62,8 @@ export function BrowseGrid<T>({
 
       {!isLoading && !isError && items.length > 0 && (
         <>
-          <div className={layout === 'list' ? 'flex flex-col gap-2' : GRID_CLASSES}>
-            {items.map(renderItem)}
+          <div className={layout === 'list' ? LIST_CLASSES : GRID_CLASSES}>
+            {items.map((item, index) => renderItem(item, index))}
           </div>
 
           <div ref={sentinelRef} className="h-10" aria-hidden="true" />

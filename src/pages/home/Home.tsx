@@ -92,7 +92,9 @@ function BrowseHome({ type }: { type: Exclude<SearchType, 'all'> }) {
           title={t('artistDiscovery.topTracks')}
           section={topTracks}
           layout="list"
-          renderItem={(track) => <TrackRow key={track.id} track={track} />}
+          renderItem={(track, index) => (
+            <TrackRow key={track.id} track={track} variant="list" rank={index + 1} />
+          )}
         />
       )}
 
@@ -256,7 +258,7 @@ function SearchMode({ query, type }: { query: string; type: SearchType }) {
                       key={`track-${item.data.id}`}
                       className="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5"
                     >
-                      <TrackRow track={item.data} />
+                      <TrackRow track={item.data} variant="list" />
                     </div>
                   )
               }
