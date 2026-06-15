@@ -171,5 +171,20 @@
     "playlists": "Playlists",
     "following": "Seguindo",
     "hoursUnit": "h"
+  },
+  "player": {
+    "nothingPlaying": "Nada tocando",
+    "premiumRequired": "Requer Spotify Premium",
+    "connecting": "Conectando player…",
+    "play": "Tocar",
+    "pause": "Pausar",
+    "shuffle": "Aleatório",
+    "previous": "Anterior",
+    "next": "Próxima",
+    "repeat": "Repetir",
+    "lyrics": "Letra",
+    "queue": "Fila",
+    "volume": "Volume",
+    "progress": "Avançar"
   }
 }

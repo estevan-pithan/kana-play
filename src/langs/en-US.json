@@ -171,5 +171,20 @@
     "playlists": "Playlists",
     "following": "Following",
     "hoursUnit": "hrs"
+  },
+  "player": {
+    "nothingPlaying": "Nothing playing",
+    "premiumRequired": "Spotify Premium required",
+    "connecting": "Connecting player…",
+    "play": "Play",
+    "pause": "Pause",
+    "shuffle": "Shuffle",
+    "previous": "Previous",
+    "next": "Next",
+    "repeat": "Repeat",
+    "lyrics": "Lyrics",
+    "queue": "Queue",
+    "volume": "Volume",
+    "progress": "Seek"
   }
 }

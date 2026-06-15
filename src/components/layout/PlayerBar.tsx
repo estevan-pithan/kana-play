@@ -1,31 +1,64 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
-  Heart,
   Mic2,
   Pause,
   Play,
   Repeat,
+  Repeat1,
   Shuffle,
   SkipBack,
   SkipForward,
   Volume2,
   ListMusic,
 } from 'lucide-react'
+
+import { usePlayer } from '@/contexts/PlayerContext'
+import { FavoriteButton } from '@/components/favorites/FavoriteButton'
 import { cn } from '@/lib/utils'
 
-const MOCK_TRACK = {
-  title: 'Cruel Summer',
-  artist: 'Taylor Swift',
-  cover:
-    'https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647',
-  durationLabel: '3:42',
-}
-
 export function PlayerBar() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isLiked, setIsLiked] = useState(false)
-  const [progress, setProgress] = useState(28)
-  const [volume, setVolume] = useState(70)
+  const { t } = useTranslation()
+  const { state, togglePlay, next, previous, seek, setVolume, toggleShuffle, cycleRepeat } =
+    usePlayer()
+  const { currentTrack, isPlaying, durationMs, volume, shuffle, repeatMode } = state
+
+  // Cosmetic progress interpolation: the SDK only pushes a new position about once a
+  // second, so we tick locally between pushes and reset whenever the authoritative
+  // value (or the track) changes. `dragMs` holds the value while the user scrubs.
+  const [displayMs, setDisplayMs] = useState(state.progressMs)
+  const [dragMs, setDragMs] = useState<number | null>(null)
+
+  // Render-phase sync to the SDK's authoritative position (see react.dev,
+  // "You Might Not Need an Effect" — storing info from previous renders).
+  const [synced, setSynced] = useState({ progressMs: state.progressMs, trackId: currentTrack?.id })
+  if (synced.progressMs !== state.progressMs || synced.trackId !== currentTrack?.id) {
+    setSynced({ progressMs: state.progressMs, trackId: currentTrack?.id })
+    setDisplayMs(state.progressMs)
+  }
+
+  useEffect(() => {
+    if (!isPlaying || dragMs !== null) return
+    const id = window.setInterval(() => {
+      setDisplayMs((prev) => (durationMs ? Math.min(prev + 1000, durationMs) : prev + 1000))
+    }, 1000)
+    return () => {
+      window.clearInterval(id)
+    }
+  }, [isPlaying, dragMs, durationMs])
+
+  const isPremiumBlocked = state.error === 'premium_required'
+  const isConnecting = !state.isReady && state.error === null
+  const controlsDisabled = !state.isReady
+  const hint = isPremiumBlocked
+    ? t('player.premiumRequired')
+    : isConnecting
+      ? t('player.connecting')
+      : null
+
+  const artistNames = currentTrack?.artists.map((a) => a.name).join(', ') ?? ''
+  const cover = currentTrack?.album.images[0]?.url
+  const progressMs = dragMs ?? displayMs
 
   return (
     <footer
@@ -41,58 +74,61 @@ export function PlayerBar() {
             className="h-12 w-12 shrink-0 overflow-hidden rounded-md bg-white/10"
             aria-hidden="true"
           >
-            <img
-              src={MOCK_TRACK.cover}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-white">
-              {MOCK_TRACK.title}
-            </p>
-            <p className="truncate text-xs text-white/50">{MOCK_TRACK.artist}</p>
-          </div>
-          <button
-            type="button"
-            aria-label="Like"
-            onClick={() => {
-              setIsLiked((prev) => !prev)
-            }}
-            className={cn(
-              'ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full transition-colors',
-              isLiked
-                ? 'text-[var(--brand-light)]'
-                : 'text-white/60 hover:text-white',
+            {currentTrack ? (
+              <>
+                <p className="truncate text-sm font-medium text-white">{currentTrack.name}</p>
+                <p className="truncate text-xs text-white/50">{artistNames}</p>
+              </>
+            ) : (
+              <p className="truncate text-sm text-white/40">{hint ?? t('player.nothingPlaying')}</p>
             )}
-          >
-            <Heart className={cn('h-4 w-4', isLiked && 'fill-current')} />
-          </button>
+          </div>
+          {currentTrack && (
+            <FavoriteButton
+              className="ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full"
+              defaults={{
+                trackName: currentTrack.name,
+                artist: artistNames,
+                album: currentTrack.album.name,
+              }}
+            />
+          )}
         </div>
 
         <div className="flex flex-col items-center gap-2">
           <div className="flex items-center gap-3">
             <button
               type="button"
-              aria-label="Shuffle"
-              className="text-white/50 transition-colors hover:text-white"
+              aria-label={t('player.shuffle')}
+              aria-pressed={shuffle}
+              disabled={controlsDisabled}
+              onClick={() => void toggleShuffle()}
+              className={cn(
+                'transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40',
+                shuffle ? 'text-[var(--brand-light)]' : 'text-white/50',
+              )}
             >
               <Shuffle className="h-4 w-4" />
             </button>
             <button
               type="button"
-              aria-label="Previous"
-              className="text-white/70 transition-colors hover:text-white"
+              aria-label={t('player.previous')}
+              disabled={controlsDisabled}
+              onClick={() => void previous()}
+              className="text-white/70 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               <SkipBack className="h-5 w-5" />
             </button>
             <button
               type="button"
-              aria-label={isPlaying ? 'Pause' : 'Play'}
-              onClick={() => {
-                setIsPlaying((prev) => !prev)
-              }}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-transform hover:scale-105"
+              aria-label={isPlaying ? t('player.pause') : t('player.play')}
+              disabled={controlsDisabled}
+              title={hint ?? undefined}
+              onClick={() => void togglePlay()}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
             >
               {isPlaying ? (
                 <Pause className="h-4 w-4 fill-current" />
@@ -102,52 +138,68 @@ export function PlayerBar() {
             </button>
             <button
               type="button"
-              aria-label="Next"
-              className="text-white/70 transition-colors hover:text-white"
+              aria-label={t('player.next')}
+              disabled={controlsDisabled}
+              onClick={() => void next()}
+              className="text-white/70 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               <SkipForward className="h-5 w-5" />
             </button>
             <button
               type="button"
-              aria-label="Repeat"
-              className="text-white/50 transition-colors hover:text-white"
+              aria-label={t('player.repeat')}
+              aria-pressed={repeatMode !== 'off'}
+              disabled={controlsDisabled}
+              onClick={() => void cycleRepeat()}
+              className={cn(
+                'transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40',
+                repeatMode === 'off' ? 'text-white/50' : 'text-[var(--brand-light)]',
+              )}
             >
-              <Repeat className="h-4 w-4" />
+              {repeatMode === 'track' ? (
+                <Repeat1 className="h-4 w-4" />
+              ) : (
+                <Repeat className="h-4 w-4" />
+              )}
             </button>
           </div>
 
           <div className="flex w-full max-w-[420px] items-center gap-2">
-            <span className="text-[10px] tabular-nums text-white/50">
-              {formatProgress(progress, MOCK_TRACK.durationLabel)}
-            </span>
+            <span className="text-[10px] tabular-nums text-white/50">{formatMs(progressMs)}</span>
             <input
               type="range"
               min={0}
-              max={100}
-              value={progress}
+              max={durationMs || 0}
+              value={Math.min(progressMs, durationMs || 0)}
+              disabled={controlsDisabled || !currentTrack}
               onChange={(e) => {
-                setProgress(Number(e.target.value))
+                setDragMs(Number(e.target.value))
+              }}
+              onPointerUp={() => {
+                if (dragMs !== null) {
+                  setDisplayMs(dragMs)
+                  void seek(dragMs)
+                  setDragMs(null)
+                }
               }}
               className="kana-range flex-1"
-              aria-label="Progress"
+              aria-label={t('player.progress')}
             />
-            <span className="text-[10px] tabular-nums text-white/50">
-              {MOCK_TRACK.durationLabel}
-            </span>
+            <span className="text-[10px] tabular-nums text-white/50">{formatMs(durationMs)}</span>
           </div>
         </div>
 
         <div className="flex items-center justify-end gap-3 text-white/60">
           <button
             type="button"
-            aria-label="Lyrics"
+            aria-label={t('player.lyrics')}
             className="transition-colors hover:text-white"
           >
             <Mic2 className="h-4 w-4" />
           </button>
           <button
             type="button"
-            aria-label="Queue"
+            aria-label={t('player.queue')}
             className="transition-colors hover:text-white"
           >
             <ListMusic className="h-4 w-4" />
@@ -159,10 +211,11 @@ export function PlayerBar() {
               min={0}
               max={100}
               value={volume}
+              disabled={controlsDisabled}
               onChange={(e) => {
-                setVolume(Number(e.target.value))
+                void setVolume(Number(e.target.value))
               }}
-              aria-label="Volume"
+              aria-label={t('player.volume')}
               className="kana-range w-24"
             />
           </div>
@@ -172,12 +225,10 @@ export function PlayerBar() {
   )
 }
 
-function formatProgress(percent: number, durationLabel: string): string {
-  const [mm, ss] = durationLabel.split(':').map(Number)
-  if (mm == null || ss == null) return '0:00'
-  const total = mm * 60 + ss
-  const elapsed = Math.round((percent / 100) * total)
-  const m = Math.floor(elapsed / 60)
-  const s = elapsed % 60
-  return `${m}:${s.toString().padStart(2, '0')}`
+function formatMs(ms: number): string {
+  if (!Number.isFinite(ms) || ms <= 0) return '0:00'
+  const totalSeconds = Math.floor(ms / 1000)
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
 }

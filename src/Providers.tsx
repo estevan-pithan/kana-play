@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { AppProvider } from '@/contexts/AppContext'
 import { FavoritesProvider } from '@/contexts/FavoritesContext'
+import { PlayerProvider } from '@/contexts/PlayerContext'
 import { router } from '@/routes/router'
 
 const queryClient = new QueryClient({
@@ -20,8 +21,10 @@ export function Providers() {
     <QueryClientProvider client={queryClient}>
       <AppProvider>
         <FavoritesProvider>
-          <RouterProvider router={router} />
-          <Toaster theme="dark" richColors position="top-right" />
+          <PlayerProvider>
+            <RouterProvider router={router} />
+            <Toaster theme="dark" richColors position="top-right" />
+          </PlayerProvider>
         </FavoritesProvider>
       </AppProvider>
     </QueryClientProvider>

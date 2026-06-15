@@ -43,7 +43,7 @@ export function AlbumTracksView({ album, backButton }: AlbumTracksViewProps) {
         {!isLoading && !isError && tracks.length > 0 && (
           <div className="flex flex-col gap-2">
             {tracks.map((track) => (
-              <TrackItem key={track.id} track={track} albumName={album.name} />
+              <TrackItem key={track.id} track={track} albumId={album.id} albumName={album.name} />
             ))}
           </div>
         )}

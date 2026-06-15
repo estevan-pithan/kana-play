@@ -15,6 +15,7 @@ const SCOPES = [
   'user-read-playback-state',
   'user-read-currently-playing',
   'user-modify-playback-state',
+  'streaming',
 ]
 
 const VERIFIER_KEY = 'kanaplay_pkce_verifier'
