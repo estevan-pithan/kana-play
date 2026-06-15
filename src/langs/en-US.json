@@ -15,12 +15,16 @@
     "tagline": "Curated discovery starts here."
   },
   "nav": {
-    "discover": "Discover",
-    "browse": "Browse",
-    "radio": "Radio",
-    "myCollection": "My Collection",
+    "home": "Home",
+    "searchPlaceholder": "Search artists, albums, tracks…",
     "insights": "Insights",
-    "language": "Language"
+    "language": "Language",
+    "logout": "Log out",
+    "typeAll": "All",
+    "typeArtists": "Artists",
+    "typeAlbums": "Albums",
+    "typeMusic": "Music",
+    "typePlaylists": "Playlists"
   },
   "login": {
     "title": "Welcome back",
@@ -45,12 +49,22 @@
     "trendingNow": "Trending now",
     "featuredArtists": "Featured Artists",
     "topPicks": "Top Picks For You",
+    "topPlaylists": "Top Playlists",
+    "topArtists": "Top Artists",
+    "topTracks": "Top Tracks",
+    "followedArtists": "Followed Artists",
+    "savedAlbums": "Saved Albums",
+    "trackCount": "{{count}} track",
+    "trackCount_plural": "{{count}} tracks",
+    "addToQueue": "Add to queue",
     "searchPlaceholder": "Search artists…",
     "albumFilterPlaceholder": "Filter by album",
     "loadMore": "Load more",
     "viewAll": "View All",
+    "scrollPrev": "Previous artists",
+    "scrollNext": "Next artists",
     "searchResultsFor": "Results for \"{{query}}\"",
-    "noResults": "No artists found",
+    "noResults": "No results found",
     "errorTitle": "We couldn't reach Spotify"
   },
   "artistProfile": {

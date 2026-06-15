@@ -10,7 +10,7 @@
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID
 const REDIRECT_URI = `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}/callback`
 const AUTHORIZE_URL = 'https://accounts.spotify.com/authorize'
-const SCOPES = ['user-read-email', 'user-read-private', 'user-top-read', 'user-library-read']
+const SCOPES = ['user-read-email', 'user-read-private', 'user-top-read', 'user-library-read', "playlist-read-private", "playlist-read-collaborative", "playlist-modify-private", "playlist-modify-public", "user-follow-read"]
 
 const VERIFIER_KEY = 'kanaplay_pkce_verifier'
 const STATE_KEY = 'kanaplay_pkce_state'

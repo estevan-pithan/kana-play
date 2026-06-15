@@ -15,12 +15,16 @@
     "tagline": "Descobertas curadas começam aqui."
   },
   "nav": {
-    "discover": "Descobrir",
-    "browse": "Explorar",
-    "radio": "Rádio",
-    "myCollection": "Minha Coleção",
+    "home": "Início",
+    "searchPlaceholder": "Buscar artistas, álbuns, faixas…",
     "insights": "Insights",
-    "language": "Idioma"
+    "language": "Idioma",
+    "logout": "Sair",
+    "typeAll": "Tudo",
+    "typeArtists": "Artistas",
+    "typeAlbums": "Álbuns",
+    "typeMusic": "Músicas",
+    "typePlaylists": "Playlists"
   },
   "login": {
     "title": "Bem-vindo de volta",
@@ -45,12 +49,22 @@
     "trendingNow": "Em alta agora",
     "featuredArtists": "Artistas em destaque",
     "topPicks": "Selecionados para você",
+    "topPlaylists": "Suas playlists",
+    "topArtists": "Seus artistas",
+    "topTracks": "Suas faixas favoritas",
+    "followedArtists": "Artistas que você segue",
+    "savedAlbums": "Álbuns salvos",
+    "trackCount": "{{count}} faixa",
+    "trackCount_plural": "{{count}} faixas",
+    "addToQueue": "Adicionar à fila",
     "searchPlaceholder": "Buscar artistas…",
     "albumFilterPlaceholder": "Filtrar por álbum",
     "loadMore": "Carregar mais",
     "viewAll": "Ver tudo",
+    "scrollPrev": "Artistas anteriores",
+    "scrollNext": "Próximos artistas",
     "searchResultsFor": "Resultados para \"{{query}}\"",
-    "noResults": "Nenhum artista encontrado",
+    "noResults": "Nenhum resultado encontrado",
     "errorTitle": "Não conseguimos falar com o Spotify"
   },
   "artistProfile": {
