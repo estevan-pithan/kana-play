@@ -7,7 +7,7 @@ import {
   type SearchResultItem,
   type SearchResultPage,
   type SearchType,
-} from '@/api/services/spotify/search'
+} from '@/api/services/spotify/search/search'
 import { useInfiniteScroll } from './useInfiniteScroll'
 
 // `/search` caps `limit` at 10 per item type, so page in increments of that.

@@ -4,11 +4,11 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import {
   getUserPlaylists,
   type SpotifyPlaylist,
-} from '@/api/services/spotify/get-user-playlists'
-import { getUserTopArtists } from '@/api/services/spotify/get-user-top-artists'
-import { getUserTopTracks } from '@/api/services/spotify/get-user-top-tracks'
-import { getFollowedArtists } from '@/api/services/spotify/get-followed-artists'
-import { getSavedAlbums } from '@/api/services/spotify/get-saved-albums'
+} from '@/api/services/spotify/user/get-user-playlists'
+import { getUserTopArtists } from '@/api/services/spotify/user/get-user-top-artists'
+import { getUserTopTracks } from '@/api/services/spotify/user/get-user-top-tracks'
+import { getFollowedArtists } from '@/api/services/spotify/user/get-followed-artists'
+import { getSavedAlbums } from '@/api/services/spotify/user/get-saved-albums'
 import type {
   SpotifyAlbum,
   SpotifyArtist,

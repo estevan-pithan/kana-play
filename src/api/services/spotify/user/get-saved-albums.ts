@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
 import {
   spotifyAlbumSchema,
   spotifyPagingSchema,
   type SpotifyAlbum,
   type SpotifyPaging,
-} from './type'
-import { getSavedAlbumsSuccessMock } from '@/api/mocks/spotify/get-saved-albums.mock'
+} from '../type'
+import { getSavedAlbumsSuccessMock } from '@/api/mocks/spotify/user/get-saved-albums.mock'
 
 export const getSavedAlbumsInputSchema = z.object({
   limit: z.number().min(1).max(50).optional(),
@@ -16,8 +16,6 @@ export const getSavedAlbumsInputSchema = z.object({
 
 export type GetSavedAlbumsInput = z.infer<typeof getSavedAlbumsInputSchema>
 
-// `/me/albums` wraps each album under `{ added_at, album }`. Flatten so the
-// shape matches the rest of the album surfaces in the app.
 const responseSchema = spotifyPagingSchema(
   z.object({ added_at: z.string(), album: spotifyAlbumSchema }),
 ).transform((page) => ({

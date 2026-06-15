@@ -1,15 +1,10 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
-import { spotifySimplifiedArtistSchema } from './type'
-import type { SpotifyPaging } from './type'
-import { getAlbumTracksSuccessMock } from '@/api/mocks/spotify/get-album-tracks.mock'
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
+import { spotifySimplifiedArtistSchema } from '../type'
+import type { SpotifyPaging } from '../type'
+import { getAlbumTracksSuccessMock } from '@/api/mocks/spotify/album/get-album-tracks.mock'
 
-/**
- * `/albums/{id}/tracks` returns *simplified* tracks: no nested `album` and no
- * images (the cover belongs to the parent album), but name, duration,
- * track number and artists are present.
- */
 export const albumTrackSchema = z.object({
   id: z.string(),
   name: z.string(),

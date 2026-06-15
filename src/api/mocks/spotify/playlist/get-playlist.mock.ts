@@ -1,4 +1,4 @@
-import type { Playlist } from '@/api/services/spotify/get-playlist'
+import type { Playlist } from '@/api/services/spotify/playlist/get-playlist'
 
 export const getPlaylistSuccessMock: Playlist = {
   id: '37i9dQZF1DXcBWIGoYBM5M',

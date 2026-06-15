@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
 import { cn } from '@/lib/utils'
-import { SEARCH_TYPES, type SearchType } from '@/api/services/spotify/search'
+import { SEARCH_TYPES, type SearchType } from '@/api/services/spotify/search/search'
 
 const TYPE_LABELS: Record<SearchType, string> = {
   all: 'nav.typeAll',

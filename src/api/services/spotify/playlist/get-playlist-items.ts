@@ -1,18 +1,8 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
-import { spotifyTrackSchema, type SpotifyPaging, type SpotifyTrack } from './type'
-import { getPlaylistItemsSuccessMock } from '@/api/mocks/spotify/get-playlist-items.mock'
-
-/**
- * `/playlists/{id}/items` returns a paginated list of `PlaylistTrackObject`.
- *
- * The spec lists both `item` (current) and `track` (deprecated) on each row —
- * but the live API today still primarily fills `track`. We accept whichever
- * shows up, preferring `item`, and run the track schema on the payload after
- * the fact so episodes / removed local files are dropped instead of crashing
- * the whole page.
- */
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
+import { spotifyTrackSchema, type SpotifyPaging, type SpotifyTrack } from '../type'
+import { getPlaylistItemsSuccessMock } from '@/api/mocks/spotify/playlist/get-playlist-items.mock'
 
 const playlistRowSchema = z
   .object({

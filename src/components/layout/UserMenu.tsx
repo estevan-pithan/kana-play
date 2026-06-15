@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useApp } from '@/contexts/AppContext'
-import { getUserProfile } from '@/api/services/spotify/get-user-profile'
+import { getUserProfile } from '@/api/services/spotify/user/get-user-profile'
 
 export function UserMenu() {
   const { t } = useTranslation()

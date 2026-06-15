@@ -1,4 +1,4 @@
-import type { ExchangeCodeForTokenResponse } from '@/api/services/spotify/exchange-code-for-token'
+import type { ExchangeCodeForTokenResponse } from '@/api/services/spotify/auth/exchange-code-for-token'
 
 export const exchangeCodeForTokenSuccessMock: ExchangeCodeForTokenResponse = {
   access_token: 'BQDj0H9f3k8xU2WqYvNmR7pL1sTfC6gK4hD8eA2bX',

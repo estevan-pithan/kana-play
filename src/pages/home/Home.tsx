@@ -15,7 +15,7 @@ import { AlbumCard } from './components/AlbumCard'
 import {
   SEARCH_TYPES,
   type SearchType,
-} from '@/api/services/spotify/search'
+} from '@/api/services/spotify/search/search'
 
 function isSearchType(value: string | null): value is SearchType {
   return value !== null && (SEARCH_TYPES as readonly string[]).includes(value)

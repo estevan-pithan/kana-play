@@ -1,4 +1,4 @@
-import type { SpotifyAlbum, GetArtistAlbumsResponse } from '@/api/services/spotify/get-artist-albums'
+import type { SpotifyAlbum, GetArtistAlbumsResponse } from '@/api/services/spotify/artist/get-artist-albums'
 
 export const getArtistAlbumsSuccessMock: GetArtistAlbumsResponse = {
   items: [

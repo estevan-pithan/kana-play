@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { keepPreviousData, skipToken, useQuery } from '@tanstack/react-query'
 
-import { getArtist } from '@/api/services/spotify/get-artist'
-import { getArtistAlbums } from '@/api/services/spotify/get-artist-albums'
-import { getAlbumTracks } from '@/api/services/spotify/get-album-tracks'
+import { getArtist } from '@/api/services/spotify/artist/get-artist'
+import { getArtistAlbums } from '@/api/services/spotify/artist/get-artist-albums'
+import { getAlbumTracks } from '@/api/services/spotify/album/get-album-tracks'
 
 const FIVE_MIN = 5 * 60 * 1000
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
-import { exchangeCodeForToken } from '@/api/services/spotify/exchange-code-for-token'
+import { exchangeCodeForToken } from '@/api/services/spotify/auth/exchange-code-for-token'
 import { useApp } from '@/contexts/AppContext'
 import { clearPkceStorage, readStoredState, readStoredVerifier } from '@/utils/spotify-pkce'
 import { writeStorage } from '@/utils/storage'

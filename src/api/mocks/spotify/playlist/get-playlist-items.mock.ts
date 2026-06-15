@@ -1,4 +1,4 @@
-import type { PlaylistTrack } from '@/api/services/spotify/get-playlist-items'
+import type { PlaylistTrack } from '@/api/services/spotify/playlist/get-playlist-items'
 import type { SpotifyPaging } from '@/api/services/spotify/type'
 
 const taylor = {

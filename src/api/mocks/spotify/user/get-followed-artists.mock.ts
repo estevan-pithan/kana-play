@@ -4,8 +4,6 @@ import type {
   SpotifyPaging,
 } from '@/api/services/spotify/type'
 
-// Reuse the top-artists mock data — same shape, same fixtures are fine for
-// a fake "followed artists" surface in the demo.
 export const getFollowedArtistsSuccessMock: SpotifyPaging<SpotifyArtist> = {
   ...getUserTopArtistsSuccessMock,
   items: [...getUserTopArtistsSuccessMock.items].reverse(),

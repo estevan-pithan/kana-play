@@ -1,7 +1,7 @@
 import { skipToken, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
-import { getPlaylist } from '@/api/services/spotify/get-playlist'
-import { getPlaylistItems } from '@/api/services/spotify/get-playlist-items'
+import { getPlaylist } from '@/api/services/spotify/playlist/get-playlist'
+import { getPlaylistItems } from '@/api/services/spotify/playlist/get-playlist-items'
 
 const FIVE_MIN = 5 * 60 * 1000
 const PAGE_SIZE = 50

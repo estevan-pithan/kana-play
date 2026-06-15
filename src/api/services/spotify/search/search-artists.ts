@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
-import { spotifyArtistResponseSchema } from './type'
-import type { SpotifyArtist, SpotifyPaging } from './type'
-import { searchArtistsSuccessMock } from '@/api/mocks/spotify/search-artists.mock'
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
+import { spotifyArtistResponseSchema } from '../type'
+import type { SpotifyArtist, SpotifyPaging } from '../type'
+import { searchArtistsSuccessMock } from '@/api/mocks/spotify/search/search-artists.mock'
 
 export const searchArtistsInputSchema = z.object({
   query: z.string().min(1),
@@ -46,9 +46,6 @@ export async function searchArtists({
 }: SearchArtistsInput): Promise<SpotifyPaging<SpotifyArtist>> {
   if (USE_SPOTIFY_MOCK) return searchArtistsSuccessMock
 
-  // Spotify's `/search` caps `limit` at 10, but the spec asks for pages of 20.
-  // Fan out into sequential 10-item chunks and stitch them back into one page,
-  // tracking the original `offset` / `limit` so consumers keep accurate pagination.
   const chunks: { limit: number; offset: number }[] = []
   let remaining = limit
   let cursor = offset

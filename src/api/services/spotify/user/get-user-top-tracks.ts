@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
 import {
   spotifyPagingSchema,
   spotifyTrackSchema,
   type SpotifyPaging,
   type SpotifyTrack,
-} from './type'
-import { getUserTopTracksSuccessMock } from '@/api/mocks/spotify/get-user-top-tracks.mock'
+} from '../type'
+import { getUserTopTracksSuccessMock } from '@/api/mocks/spotify/user/get-user-top-tracks.mock'
 
 export const getUserTopTracksInputSchema = z.object({
   timeRange: z.enum(['short_term', 'medium_term', 'long_term']).optional(),

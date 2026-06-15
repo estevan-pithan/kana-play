@@ -1,14 +1,13 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
-import { spotifyAlbumSchema } from './type'
-import { getArtistAlbumsSuccessMock } from '@/api/mocks/spotify/get-artist-albums.mock'
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
+import { spotifyAlbumSchema } from '../type'
+import { getArtistAlbumsSuccessMock } from '@/api/mocks/spotify/artist/get-artist-albums.mock'
 
-export type { SpotifyAlbum } from './type'
+export type { SpotifyAlbum } from '../type'
 
 export const getArtistAlbumsInputSchema = z.object({
   id: z.string(),
-  // Spotify caps `/artists/{id}/albums?limit` at 10 (unlike most paged endpoints).
   limit: z.number().min(1).max(10).optional(),
   offset: z.number().min(0).optional(),
 })

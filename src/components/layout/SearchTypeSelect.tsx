@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SEARCH_TYPES, type SearchType } from '@/api/services/spotify/search'
+import { SEARCH_TYPES, type SearchType } from '@/api/services/spotify/search/search'
 
 const TYPE_KEYS: Record<SearchType, string> = {
   all: 'nav.typeAll',

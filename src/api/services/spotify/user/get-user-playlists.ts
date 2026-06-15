@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
 import {
   spotifyPagingSchema,
   spotifyPlaylistSchema,
   type SpotifyPaging,
   type SpotifyPlaylist,
-} from './type'
-import { getUserPlaylistsSuccessMock } from '@/api/mocks/spotify/get-user-playlists.mock'
+} from '../type'
+import { getUserPlaylistsSuccessMock } from '@/api/mocks/spotify/user/get-user-playlists.mock'
 
 export const getUserPlaylistsInputSchema = z.object({
   limit: z.number().min(1).max(50).optional(),
@@ -42,5 +42,5 @@ export async function getUserPlaylists({
   return responseSchema.parse(response.data)
 }
 
-export type { SpotifyPlaylist } from './type'
+export type { SpotifyPlaylist } from '../type'
 export const userPlaylistsPagingSchema = spotifyPagingSchema(spotifyPlaylistSchema)

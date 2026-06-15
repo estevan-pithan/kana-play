@@ -1,10 +1,5 @@
 import { z } from 'zod'
 
-/**
- * Shared Spotify schemas/types reused across more than one endpoint in this domain.
- * Endpoint-specific schemas stay in their own service file.
- */
-
 export const spotifyImageSchema = z.object({
   url: z.string(),
   height: z.number().nullable(),
@@ -13,7 +8,6 @@ export const spotifyImageSchema = z.object({
 
 export type SpotifyImage = z.infer<typeof spotifyImageSchema>
 
-/** Slim artist reference embedded in tracks and albums. */
 export const spotifySimplifiedArtistSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -53,8 +47,6 @@ export const spotifyTrackSchema = z.object({
     images: z.array(spotifyImageSchema),
   }),
   artists: z.array(spotifySimplifiedArtistSchema),
-  // Spotify has stopped returning `preview_url` on many endpoints (the field is
-  // simply absent rather than null), so treat a missing value as null.
   preview_url: z.string().nullable().optional().default(null),
 })
 
@@ -72,8 +64,6 @@ export const spotifyPlaylistSchema = z
       id: z.string(),
       display_name: z.string().nullable().default(null),
     }),
-    // `/me/playlists` returns the track count under `items`, while the full
-    // `/playlists/{id}` endpoint uses `tracks`. Accept either and normalise.
     tracks: trackCountSchema.optional(),
     items: trackCountSchema.optional(),
     external_urls: z.object({ spotify: z.string() }),
@@ -106,7 +96,6 @@ export function spotifyPagingSchema<T extends z.ZodTypeAny>(item: T) {
   })
 }
 
-/** Generic shape of Spotify's paginated collections. */
 export interface SpotifyPaging<T> {
   items: T[]
   total: number

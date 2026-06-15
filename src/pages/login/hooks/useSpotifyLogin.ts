@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { USE_SPOTIFY_MOCK } from '@/api/services/spotify/api'
-import { exchangeCodeForTokenSuccessMock } from '@/api/mocks/spotify/exchange-code-for-token.mock'
+import { exchangeCodeForTokenSuccessMock } from '@/api/mocks/spotify/auth/exchange-code-for-token.mock'
 import { useApp } from '@/contexts/AppContext'
 import { buildSpotifyAuthorizeUrl } from '@/utils/spotify-pkce'
 

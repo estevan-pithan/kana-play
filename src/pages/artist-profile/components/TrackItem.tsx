@@ -1,6 +1,6 @@
 import { Play } from 'lucide-react'
 
-import type { AlbumTrack } from '@/api/services/spotify/get-album-tracks'
+import type { AlbumTrack } from '@/api/services/spotify/album/get-album-tracks'
 import { FavoriteButton } from '@/components/favorites/FavoriteButton'
 import { formatDuration } from '../utils'
 

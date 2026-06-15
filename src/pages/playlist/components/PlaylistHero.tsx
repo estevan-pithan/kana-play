@@ -2,7 +2,7 @@ import { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Play } from 'lucide-react'
 
-import type { Playlist } from '@/api/services/spotify/get-playlist'
+import type { Playlist } from '@/api/services/spotify/playlist/get-playlist'
 
 interface PlaylistHeroProps {
   playlist: Playlist

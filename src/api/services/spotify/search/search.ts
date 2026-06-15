@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
 import {
   spotifyAlbumSchema,
   spotifyArtistResponseSchema,
@@ -10,8 +10,8 @@ import {
   type SpotifyArtist,
   type SpotifyPlaylist,
   type SpotifyTrack,
-} from './type'
-import { searchArtistsSuccessMock } from '@/api/mocks/spotify/search-artists.mock'
+} from '../type'
+import { searchArtistsSuccessMock } from '@/api/mocks/spotify/search/search-artists.mock'
 
 export const SEARCH_TYPES = ['all', 'artist', 'album', 'track', 'playlist'] as const
 export type SearchType = (typeof SEARCH_TYPES)[number]
@@ -31,10 +31,6 @@ export interface SearchResultPage {
   hasMore: boolean
 }
 
-/**
- * Spotify's `/search` rejects a `limit` above 10 (per item type), unlike the
- * other paginated endpoints that allow up to 50. Callers are clamped to this.
- */
 export const SEARCH_MAX_LIMIT = 10
 
 export const searchInputSchema = z.object({
@@ -76,21 +72,12 @@ function dedupe<T extends { id: string }>(arr: T[]): T[] {
   return out
 }
 
-/**
- * Generic Spotify search.
- *
- * - Single type → calls `/search?type=<x>` once, paginated normally.
- * - `all`        → fans out 4 calls in parallel per page with `limit/4` slots each
- *                  and interleaves the results. `offset` is shared, so consumers
- *                  can keep using a single offset cursor for infinite scroll.
- */
 export async function search({
   query,
   type = 'artist',
   limit = SEARCH_MAX_LIMIT,
   offset = 0,
 }: SearchInput): Promise<SearchResultPage> {
-  // `/search` caps `limit` at 10; clamp here so no caller path can exceed it.
   const safeLimit = Math.min(limit, SEARCH_MAX_LIMIT)
 
   if (USE_SPOTIFY_MOCK) {
@@ -104,8 +91,6 @@ export async function search({
   }
 
   if (type === 'all') {
-    // For multi-type search `limit`/`offset` apply *per item type*, so we pass
-    // them straight through (no dividing) to get up to `safeLimit` of each kind.
     const response = await apiSpotify.get('/search', {
       params: {
         q: query,
@@ -129,7 +114,6 @@ export async function search({
       (parsed.playlists?.items ?? []).filter((x): x is SpotifyPlaylist => x !== null),
     )
 
-    // Interleave one of each kind round-robin so all categories surface together.
     const items: SearchResultItem[] = []
     const max = Math.max(artists.length, albums.length, tracks.length, playlists.length)
     for (let i = 0; i < max; i += 1) {

@@ -1,16 +1,9 @@
 import { z } from 'zod'
 
-import { apiSpotify, USE_SPOTIFY_MOCK } from './api'
-import { spotifyImageSchema } from './type'
-import { getPlaylistSuccessMock } from '@/api/mocks/spotify/get-playlist.mock'
+import { apiSpotify, USE_SPOTIFY_MOCK } from '../api'
+import { spotifyImageSchema } from '../type'
+import { getPlaylistSuccessMock } from '@/api/mocks/spotify/playlist/get-playlist.mock'
 
-/**
- * `/playlists/{id}` returns the full playlist. We only ask for the fields the
- * hero needs so the response stays small — Spotify supports the `fields`
- * query param exactly for that. The track count is sourced from
- * `/playlists/{id}/items` instead because Spotify intermittently omits
- * `tracks(total)` from this projection, so we make it tolerant here.
- */
 const playlistFields =
   'id,name,description,images,owner(id,display_name),tracks(total),external_urls'
 

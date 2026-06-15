@@ -1,4 +1,4 @@
-import type { AlbumTrack } from '@/api/services/spotify/get-album-tracks'
+import type { AlbumTrack } from '@/api/services/spotify/album/get-album-tracks'
 import type { SpotifyPaging } from '@/api/services/spotify/type'
 
 const artist = {
