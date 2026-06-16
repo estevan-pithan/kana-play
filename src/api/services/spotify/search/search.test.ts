@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { search, SEARCH_MAX_LIMIT } from './search'
+import { search, searchPage, SEARCH_MAX_LIMIT, SEARCH_PAGE_SIZE } from './search'
 import { apiSpotify } from '../api'
 
 vi.mock('../api', async (importOriginal) => {
@@ -246,5 +246,86 @@ describe('search()', () => {
         params: { q: 'q', type: 'artist,album,track,playlist', limit: SEARCH_MAX_LIMIT, offset: 20 },
       })
     })
+  })
+})
+
+describe('searchPage()', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('assembles a 20-item page from two batches of 10', async () => {
+    const spy = vi
+      .spyOn(apiSpotify, 'get')
+      .mockResolvedValueOnce({
+        data: {
+          artists: {
+            items: Array.from({ length: 10 }, (_, i) => makeArtist(`a${i}`)),
+            total: 50,
+            limit: 10,
+            offset: 0,
+            next: 'http://next',
+          },
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          artists: {
+            items: Array.from({ length: 10 }, (_, i) => makeArtist(`b${i}`)),
+            total: 50,
+            limit: 10,
+            offset: 10,
+            next: 'http://next',
+          },
+        },
+      })
+
+    const result = await searchPage({ query: 'pop', type: 'artist' })
+
+    expect(spy).toHaveBeenCalledTimes(2)
+    expect(result.items).toHaveLength(SEARCH_PAGE_SIZE)
+    expect(result.limit).toBe(SEARCH_PAGE_SIZE)
+    expect(result.hasMore).toBe(true)
+  })
+
+  it('offsets the second batch by 10 from the page offset', async () => {
+    const spy = vi.spyOn(apiSpotify, 'get').mockResolvedValue({
+      data: {
+        artists: {
+          items: [makeArtist('x')],
+          total: 50,
+          limit: 10,
+          offset: 0,
+          next: 'http://next',
+        },
+      },
+    })
+
+    await searchPage({ query: 'pop', type: 'artist', offset: 20 })
+
+    expect(spy).toHaveBeenCalledTimes(2)
+    expect(spy.mock.calls[0]![1]).toMatchObject({ params: { offset: 20 } })
+    expect(spy.mock.calls[1]![1]).toMatchObject({ params: { offset: 30 } })
+  })
+
+  it('skips the second fetch when the first has no more results', async () => {
+    const spy = vi.spyOn(apiSpotify, 'get').mockResolvedValue({
+      data: {
+        artists: {
+          items: [makeArtist('only')],
+          total: 1,
+          limit: 10,
+          offset: 0,
+          next: null,
+        },
+      },
+    })
+
+    const result = await searchPage({ query: 'pop', type: 'artist' })
+
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(result.items).toHaveLength(1)
+    expect(result.limit).toBe(SEARCH_PAGE_SIZE)
+    expect(result.hasMore).toBe(false)
   })
 })

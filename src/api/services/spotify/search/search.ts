@@ -104,12 +104,8 @@ export async function search({
     const artists = dedupe(
       (parsed.artists?.items ?? []).filter((x): x is SpotifyArtist => x !== null),
     )
-    const albums = dedupe(
-      (parsed.albums?.items ?? []).filter((x): x is SpotifyAlbum => x !== null),
-    )
-    const tracks = dedupe(
-      (parsed.tracks?.items ?? []).filter((x): x is SpotifyTrack => x !== null),
-    )
+    const albums = dedupe((parsed.albums?.items ?? []).filter((x): x is SpotifyAlbum => x !== null))
+    const tracks = dedupe((parsed.tracks?.items ?? []).filter((x): x is SpotifyTrack => x !== null))
     const playlists = dedupe(
       (parsed.playlists?.items ?? []).filter((x): x is SpotifyPlaylist => x !== null),
     )
@@ -133,10 +129,7 @@ export async function search({
       (parsed.tracks?.total ?? 0) +
       (parsed.playlists?.total ?? 0)
     const hasMore = Boolean(
-      parsed.artists?.next ||
-        parsed.albums?.next ||
-        parsed.tracks?.next ||
-        parsed.playlists?.next,
+      parsed.artists?.next || parsed.albums?.next || parsed.tracks?.next || parsed.playlists?.next,
     )
 
     return { items, total, limit: safeLimit, offset, hasMore }
@@ -152,30 +145,60 @@ export async function search({
   let hasMore = false
 
   if (type === 'artist' && parsed.artists) {
-    items = dedupe(
-      parsed.artists.items.filter((x): x is SpotifyArtist => x !== null),
-    ).map((data) => ({ kind: 'artist', data }))
+    items = dedupe(parsed.artists.items.filter((x): x is SpotifyArtist => x !== null)).map(
+      (data) => ({ kind: 'artist', data }),
+    )
     total = parsed.artists.total
     hasMore = parsed.artists.next !== null
   } else if (type === 'album' && parsed.albums) {
-    items = dedupe(
-      parsed.albums.items.filter((x): x is SpotifyAlbum => x !== null),
-    ).map((data) => ({ kind: 'album', data }))
+    items = dedupe(parsed.albums.items.filter((x): x is SpotifyAlbum => x !== null)).map(
+      (data) => ({ kind: 'album', data }),
+    )
     total = parsed.albums.total
     hasMore = parsed.albums.next !== null
   } else if (type === 'track' && parsed.tracks) {
-    items = dedupe(
-      parsed.tracks.items.filter((x): x is SpotifyTrack => x !== null),
-    ).map((data) => ({ kind: 'track', data }))
+    items = dedupe(parsed.tracks.items.filter((x): x is SpotifyTrack => x !== null)).map(
+      (data) => ({ kind: 'track', data }),
+    )
     total = parsed.tracks.total
     hasMore = parsed.tracks.next !== null
   } else if (type === 'playlist' && parsed.playlists) {
-    items = dedupe(
-      parsed.playlists.items.filter((x): x is SpotifyPlaylist => x !== null),
-    ).map((data) => ({ kind: 'playlist', data }))
+    items = dedupe(parsed.playlists.items.filter((x): x is SpotifyPlaylist => x !== null)).map(
+      (data) => ({ kind: 'playlist', data }),
+    )
     total = parsed.playlists.total
     hasMore = parsed.playlists.next !== null
   }
 
   return { items, total, limit: safeLimit, offset, hasMore }
+}
+
+export const SEARCH_PAGE_SIZE = SEARCH_MAX_LIMIT * 2
+
+export async function searchPage(input: SearchInput): Promise<SearchResultPage> {
+  const baseOffset = input.offset ?? 0
+
+  const first = await search({
+    ...input,
+    limit: SEARCH_MAX_LIMIT,
+    offset: baseOffset,
+  })
+
+  if (!first.hasMore) {
+    return { ...first, limit: SEARCH_PAGE_SIZE }
+  }
+
+  const second = await search({
+    ...input,
+    limit: SEARCH_MAX_LIMIT,
+    offset: baseOffset + SEARCH_MAX_LIMIT,
+  })
+
+  return {
+    items: [...first.items, ...second.items],
+    total: second.total || first.total,
+    limit: SEARCH_PAGE_SIZE,
+    offset: baseOffset,
+    hasMore: second.hasMore,
+  }
 }

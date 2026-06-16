@@ -4,15 +4,15 @@ import { renderHookWithProviders } from '@/test/utils'
 import { useSearchResults } from './useSearchResults'
 
 vi.mock('@/api/services/spotify/search/search', () => ({
-  search: vi.fn(),
-  SEARCH_MAX_LIMIT: 10,
+  searchPage: vi.fn(),
+  SEARCH_PAGE_SIZE: 20,
 }))
 
 describe('useSearchResults', () => {
   it('returns flattened items from pages', async () => {
-    const { search } = await import('@/api/services/spotify/search/search')
+    const { searchPage } = await import('@/api/services/spotify/search/search')
 
-    vi.mocked(search).mockResolvedValue({
+    vi.mocked(searchPage).mockResolvedValue({
       items: [
         { kind: 'artist', data: { id: 'a1', name: 'Artist', images: [], external_urls: { spotify: 'https://s' } } },
       ],
@@ -31,19 +31,19 @@ describe('useSearchResults', () => {
   })
 
   it('does not fetch when query is empty', async () => {
-    const { search } = await import('@/api/services/spotify/search/search')
-    vi.mocked(search).mockClear()
+    const { searchPage } = await import('@/api/services/spotify/search/search')
+    vi.mocked(searchPage).mockClear()
 
     const { result } = renderHookWithProviders(() => useSearchResults('', 'artist'))
 
     await waitFor(() => expect(result.current.isLoading).toBe(false))
-    expect(search).not.toHaveBeenCalled()
+    expect(searchPage).not.toHaveBeenCalled()
     expect(result.current.items).toEqual([])
   })
 
   it('handles error state', async () => {
-    const { search } = await import('@/api/services/spotify/search/search')
-    vi.mocked(search).mockRejectedValue(new Error('Network'))
+    const { searchPage } = await import('@/api/services/spotify/search/search')
+    vi.mocked(searchPage).mockRejectedValue(new Error('Network'))
 
     const { result } = renderHookWithProviders(() => useSearchResults('fail', 'artist'))
 
