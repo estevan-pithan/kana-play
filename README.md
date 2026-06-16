@@ -84,6 +84,14 @@ VITE_USE_SPOTIFY_MOCK=true
 
 In mock mode, logging in skips the OAuth redirect and the app serves deterministic fixture data. This is the same mode used by the E2E suite.
 
+## Spotify API caveats
+
+Spotify has been reducing what its Web API exposes to third-party apps, and a couple of those changes directly affect data the challenge brief asks to display. These are platform limitations, not missing features in this project:
+
+- **The artist top-tracks endpoint was deprecated.** `GET /artists/{id}/top-tracks` is no longer available to new third-party apps. The brief lets the artist detail page show *"top tracks **or** albums"*, so this app uses the artist's **albums** (and each album's track list) on the [artist profile](src/pages/artist-profile/ArtistProfile.tsx) instead. _(Note: the user-scoped `GET /me/top/tracks` endpoint is a different API and still works — it powers the home and insights screens.)_
+- **Artist detail fields were trimmed.** Fields such as `followers` and `popularity` are no longer returned (or come back empty) from the artist details endpoint for new apps. Because they can't be retrieved reliably, the UI does not render follower counts or popularity figures rather than showing fabricated or empty values.
+- **`/search` caps `limit` at 10 per item type.** To honor the "20 items per page" requirement, each results page is assembled from two back-to-back batches of 10 (see `searchPage()` in [src/api/services/spotify/search/search.ts](src/api/services/spotify/search/search.ts)).
+
 ## Available scripts
 
 | Command | Description |
