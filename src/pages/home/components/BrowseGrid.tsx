@@ -7,7 +7,6 @@ import type { HomeSection } from '../hooks/useHomeData'
 interface BrowseGridProps<T> {
   title: string
   section: HomeSection<T>
-  /** `grid` for cards, `list` for full-width rows (tracks). */
   layout?: 'grid' | 'list'
   renderItem: (item: T, index: number) => ReactNode
 }
@@ -15,7 +14,6 @@ interface BrowseGridProps<T> {
 const GRID_CLASSES =
   'grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
 
-/** Full-width track rows flow into up to two columns so wide screens aren't wasted. */
 const LIST_CLASSES = 'grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2'
 
 export function BrowseGrid<T>({

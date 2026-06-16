@@ -5,11 +5,6 @@ import { Search, X } from 'lucide-react'
 
 import { SearchTypeSelect } from './SearchTypeSelect'
 
-/**
- * Liquid-glass pill containing the search input and the type select. The query
- * is owned by the URL (`?q=`); typing pushes a debounced update to the URL,
- * which the Home page reads to switch into search mode.
- */
 export function SearchPill() {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -18,7 +13,6 @@ export function SearchPill() {
   const debounceRef = useRef<number | undefined>(undefined)
   const lastUrlValueRef = useRef<string>(searchParams.get('q') ?? '')
 
-  // Keep input in sync if the URL changes from outside (e.g. clicking Home).
   useEffect(() => {
     const fromUrl = searchParams.get('q') ?? ''
     if (fromUrl !== lastUrlValueRef.current) {

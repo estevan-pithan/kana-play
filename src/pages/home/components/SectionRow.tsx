@@ -9,14 +9,11 @@ interface SectionRowProps {
   isEmpty?: boolean
   skeletonShape?: 'square' | 'circle' | 'row'
   skeletonCount?: number
-  /** Called as the carousel nears its right edge so more pages can load. */
   onReachEnd?: () => void
-  /** Shows a trailing spinner while the next page is in flight. */
   isFetchingMore?: boolean
   children: ReactNode
 }
 
-/** Distance (px) from the right edge that triggers the next page fetch. */
 const PREFETCH_THRESHOLD = 320
 
 function Skeleton({ shape, count }: { shape: NonNullable<SectionRowProps['skeletonShape']>; count: number }) {
@@ -102,8 +99,6 @@ export function SectionRow({
     }
   }, [onReachEnd])
 
-  // Re-sync on scroll and whenever the content resizes (new pages, viewport
-  // changes). ResizeObserver covers items being appended after a fetch.
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return

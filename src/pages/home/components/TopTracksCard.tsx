@@ -10,13 +10,8 @@ interface TopTracksCardProps {
   section: HomeSection<SpotifyTrack>
 }
 
-/** Distance (px) from the bottom that triggers the next page fetch. */
 const PREFETCH_THRESHOLD = 240
 
-/**
- * Glass-framed vertical list of the user's top tracks, sized to sit in the
- * right column of the home grid. Loads more pages as the inner list scrolls.
- */
 export function TopTracksCard({ title, section }: TopTracksCardProps) {
   const { t } = useTranslation()
   const { items, isLoading, isError, loadMore, isFetchingNextPage } = section

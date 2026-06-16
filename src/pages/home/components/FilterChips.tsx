@@ -16,10 +16,6 @@ function isSearchType(value: string | null): value is SearchType {
   return value !== null && (SEARCH_TYPES as readonly string[]).includes(value)
 }
 
-/**
- * Liquid-glass chips synced with `?type=` URL param. Shares the source of
- * truth with `<SearchTypeSelect>` in the navbar so changing one updates both.
- */
 export function FilterChips() {
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()

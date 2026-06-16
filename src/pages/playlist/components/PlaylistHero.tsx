@@ -10,7 +10,6 @@ interface PlaylistHeroProps {
   backButton?: ReactNode
 }
 
-/** Full-bleed hero for a playlist — its cover fills the background. */
 export function PlaylistHero({ playlist, trackCount, backButton }: PlaylistHeroProps) {
   const { t } = useTranslation()
   const cover = playlist.images[0]?.url

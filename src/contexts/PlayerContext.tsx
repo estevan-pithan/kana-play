@@ -62,7 +62,6 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
 
 const SDK_REPEAT: Record<number, RepeatMode> = { 0: 'off', 1: 'context', 2: 'track' }
 
-/** Map the SDK's uri-based track into the app's `SpotifyTrack` shape used across the UI. */
 function mapSdkTrack(track: SpotifyPlayerTrack): SpotifyTrack {
   const albumId = track.album.uri.split(':').pop() ?? ''
   return {
@@ -113,7 +112,6 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const deviceIdRef = useRef<string | null>(null)
   const tokenRef = useRef<string | null>(token)
 
-  // Always hand the SDK the freshest token without re-creating the player.
   useEffect(() => {
     tokenRef.current = token
   }, [token])
@@ -147,7 +145,6 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         player.addListener('ready', ({ device_id }) => {
           deviceIdRef.current = device_id
           dispatch({ type: 'PATCH', payload: { deviceId: device_id, isReady: true, error: null } })
-          // Route playback commands to our in-browser device (without auto-starting).
           void transferPlayback({ deviceId: device_id, play: false }).catch(() => undefined)
         })
 

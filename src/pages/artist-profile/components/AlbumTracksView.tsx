@@ -11,10 +11,6 @@ interface AlbumTracksViewProps {
   backButton?: ReactNode
 }
 
-/**
- * Full-screen album view: the album hero (cover backdrop) followed by its track
- * list. Returning to the albums list is handled by the page-level back button.
- */
 export function AlbumTracksView({ album, backButton }: AlbumTracksViewProps) {
   const { t } = useTranslation()
   const { tracks, isLoading, isError } = useAlbumTracks(album.id)

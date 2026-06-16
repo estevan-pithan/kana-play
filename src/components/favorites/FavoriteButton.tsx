@@ -7,22 +7,13 @@ import { cn } from '@/lib/utils'
 import { AddFavoriteDialog, type FavoriteDefaults } from './AddFavoriteDialog'
 
 interface FavoriteButtonProps {
-  /** Track identity used to look up, add or remove the favorite. */
   defaults: FavoriteDefaults
-  /** Layout classes applied to the button regardless of state. */
   className?: string
-  /** Color classes applied while the track is favorited. */
   favoritedClassName?: string
-  /** Color classes applied while the track is not favorited. */
   idleClassName?: string
   iconClassName?: string
 }
 
-/**
- * Heart toggle shared by the home and artist-profile track lists. Clicking an
- * un-favorited track opens the dialog to capture details; clicking a favorited
- * one removes it immediately.
- */
 export function FavoriteButton({
   defaults,
   className,

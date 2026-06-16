@@ -9,10 +9,6 @@ interface PlaylistTrackItemProps {
   track: SpotifyTrack
 }
 
-/**
- * A row in the playlist tracks list. Shows the album cover (playlist tracks
- * span many albums) alongside title, artist and album.
- */
 export function PlaylistTrackItem({ index, track }: PlaylistTrackItemProps) {
   const artistNames = track.artists.map((a) => a.name).join(', ')
   const cover = track.album.images[0]?.url

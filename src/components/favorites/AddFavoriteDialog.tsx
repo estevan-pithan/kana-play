@@ -13,7 +13,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 
-/** Values used to pre-fill the form when a track is selected. */
 export interface FavoriteDefaults {
   trackName: string
   artist: string
@@ -62,7 +61,6 @@ export function AddFavoriteDialog({
     defaultValues: { trackName: '', artist: '', album: '', notes: '' },
   })
 
-  // Re-seed the form whenever a new track is selected.
   useEffect(() => {
     if (defaults) {
       reset({ ...defaults, notes: '' })

@@ -22,11 +22,6 @@ function isSearchType(value: string | null): value is SearchType {
   return value !== null && (SEARCH_TYPES as readonly string[]).includes(value)
 }
 
-/**
- * Dropdown that writes the search type to the URL via `?type=`. Reads the
- * current value back from the URL so the FilterChips on Home and this select
- * stay synchronized through a single source of truth.
- */
 export function SearchTypeSelect() {
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()

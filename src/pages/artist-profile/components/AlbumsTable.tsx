@@ -24,7 +24,6 @@ interface AlbumsTableProps {
   isFetching: boolean
   onPageChange: (page: number) => void
   onSelect: (album: SpotifyAlbum) => void
-  /** Highlights the active row in the desktop two-panel layout. */
   selectedAlbumId?: string
 }
 

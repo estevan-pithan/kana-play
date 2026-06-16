@@ -15,7 +15,6 @@ const PERIODS: { value: InsightsPeriod; labelKey: string }[] = [
   { value: 'year', labelKey: 'insights.periodYear' },
 ]
 
-/** The period (top-items affinity window) only applies to these views. */
 const PERIOD_VIEWS: InsightsView[] = ['overview', 'topCharts']
 
 const SUBTITLE_KEY: Record<InsightsView, string> = {

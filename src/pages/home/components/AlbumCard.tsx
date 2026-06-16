@@ -35,7 +35,6 @@ export function AlbumCard({ album }: AlbumCardProps) {
   const className = 'group block w-[160px] shrink-0 space-y-2'
   const style = { scrollSnapAlign: 'start' } as const
 
-  // Open the album's artist page with this album pre-selected so its tracks load.
   if (artist) {
     return (
       <Link to={`/artist/${artist.id}`} state={{ album }} className={className} style={style}>

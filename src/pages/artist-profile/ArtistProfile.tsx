@@ -15,7 +15,6 @@ export default function ArtistProfile() {
   const location = useLocation()
   const { id } = useParams<{ id: string }>()
 
-  // Albums opened from the home search arrive pre-selected via router state.
   const preselectedAlbum =
     (location.state as { album?: SpotifyAlbum } | null)?.album ?? null
 
@@ -24,8 +23,6 @@ export default function ArtistProfile() {
 
   const [selectedAlbum, setSelectedAlbum] = useState<SpotifyAlbum | null>(preselectedAlbum)
 
-  // Page-level back — rendered inside the hero. From an album it returns to the
-  // albums list; from the albums list it leaves the profile entirely.
   const backButton = (
     <button
       type="button"
@@ -43,8 +40,6 @@ export default function ArtistProfile() {
     </button>
   )
 
-  // The album view only needs the selected album, so render it regardless of
-  // the artist query — albums opened from search arrive before the artist loads.
   if (selectedAlbum) {
     return <AlbumTracksView album={selectedAlbum} backButton={backButton} />
   }

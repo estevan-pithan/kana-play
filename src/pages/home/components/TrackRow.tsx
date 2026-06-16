@@ -17,9 +17,7 @@ function formatDuration(ms: number) {
 interface TrackRowProps {
   track: SpotifyTrack
   onAdd?: (track: SpotifyTrack) => void
-  /** `carousel` keeps the fixed-width snap behaviour; `list` fills its column. */
   variant?: 'carousel' | 'list'
-  /** 1-based position shown as a leading rank in `list` variant. */
   rank?: number
 }
 
